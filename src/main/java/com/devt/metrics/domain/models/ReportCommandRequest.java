@@ -1,4 +1,4 @@
-package com.devt.metrics.domain.inbound;
+package com.devt.metrics.domain.models;
 
 import java.util.List;
 
