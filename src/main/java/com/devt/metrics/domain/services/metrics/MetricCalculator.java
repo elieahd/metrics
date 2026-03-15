@@ -1,10 +1,8 @@
 package com.devt.metrics.domain.services.metrics;
 
-import com.devt.metrics.domain.models.Metric;
-import com.devt.metrics.domain.models.ProjectContext;
+@FunctionalInterface
+public interface MetricCalculator<I, O> {
 
-public interface MetricCalculator {
-
-    Metric calculate(ProjectContext project);
+    O apply(I input);
 
 }

@@ -29,8 +29,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- dependencies -->
         <spring.boot.version>4.0.3</spring.boot.version>
-        <github-api.version>1.330</github-api.version>
         <flying-saucer.version>10.0.7</flying-saucer.version>
+        <okhttp.version>5.3.2</okhttp.version>
         <!-- test dependencies -->
         <archunit.version>1.4.1</archunit.version>
         <!-- plugins -->
@@ -55,9 +55,13 @@
             <version>${flying-saucer.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kohsuke</groupId>
-            <artifactId>github-api</artifactId>
-            <version>${github-api.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp-jvm</artifactId>
+            <version>${okhttp.version}</version>
         </dependency>
         <!-- Test dependencies -->
         <dependency>

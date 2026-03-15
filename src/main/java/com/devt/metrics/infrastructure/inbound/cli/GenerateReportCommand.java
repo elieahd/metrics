@@ -1,7 +1,7 @@
 package com.devt.metrics.infrastructure.inbound.cli;
 
 import com.devt.metrics.domain.inbound.GenerateReport;
-import com.devt.metrics.domain.models.Project;
+import com.devt.metrics.domain.inbound.ReportCommandRequest;
 import com.devt.metrics.infrastructure.inbound.cli.exception.MissingArgException;
 import com.devt.metrics.infrastructure.inbound.cli.helper.ApplicationArgumentsHelper;
 import org.springframework.boot.ApplicationArguments;
@@ -43,8 +43,8 @@ public class GenerateReportCommand implements Command {
                 .getArgs("repos")
                 .orElseThrow(() -> new MissingArgException("repos"));
 
-        Project project = new Project(name, repositories);
-        generateReport.perform(project);
+        ReportCommandRequest request = new ReportCommandRequest(name, repositories);
+        generateReport.perform(request);
     }
 
 }

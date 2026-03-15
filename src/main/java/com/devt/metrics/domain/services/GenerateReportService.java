@@ -1,17 +1,22 @@
 package com.devt.metrics.domain.services;
 
 import com.devt.metrics.domain.inbound.GenerateReport;
-import com.devt.metrics.domain.models.Metric;
-import com.devt.metrics.domain.models.Project;
-import com.devt.metrics.domain.models.ProjectContext;
-import com.devt.metrics.domain.models.PullRequest;
-import com.devt.metrics.domain.models.Release;
-import com.devt.metrics.domain.models.Repository;
+import com.devt.metrics.domain.inbound.ReportCommandRequest;
+import com.devt.metrics.domain.models.entities.Pipeline;
+import com.devt.metrics.domain.models.entities.Project;
+import com.devt.metrics.domain.models.entities.PullRequest;
+import com.devt.metrics.domain.models.entities.Release;
+import com.devt.metrics.domain.models.entities.Repository;
+import com.devt.metrics.domain.models.metrics.ProjectMetric;
+import com.devt.metrics.domain.models.reports.Report;
 import com.devt.metrics.domain.outbound.PdfGenerator;
-import com.devt.metrics.domain.outbound.PullRequestsInventory;
-import com.devt.metrics.domain.outbound.ReleasesInventory;
+import com.devt.metrics.domain.outbound.PipelineInventory;
+import com.devt.metrics.domain.outbound.ProjectInventory;
+import com.devt.metrics.domain.outbound.PullRequestInventory;
+import com.devt.metrics.domain.outbound.ReleaseInventory;
 import com.devt.metrics.domain.outbound.ReportInventory;
-import com.devt.metrics.domain.services.metrics.MetricCalculators;
+import com.devt.metrics.domain.services.metrics.MetricCalculator;
+import com.devt.metrics.domain.services.metrics.ProjectMetricCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,80 +28,87 @@ import java.util.Map;
 public class GenerateReportService implements GenerateReport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateReportService.class);
-    private static final String REPORT_TEMPLATE = "metrics-report";
-    private static final String REPORT_OUTPUT_FOLDER = "reports";
+    private static final String TEMPLATE_NAME = "metrics-report";
 
-    private final PullRequestsInventory prsInventory;
-    private final ReleasesInventory releasesInventory;
-    private final MetricCalculators calculators;
+    private final PullRequestInventory pullRequestInventory;
+    private final ReleaseInventory releaseInventory;
+    private final PipelineInventory pipelineInventory;
+    private final ProjectInventory projectInventory;
+    private final MetricCalculator<Project, ProjectMetric> metricCalculator;
     private final PdfGenerator pdfGenerator;
     private final ReportInventory reportInventory;
 
-    public GenerateReportService(PullRequestsInventory prsInventory,
-                                 ReleasesInventory releasesInventory,
-                                 MetricCalculators calculators,
+    public GenerateReportService(PullRequestInventory pullRequestInventory,
+                                 ReleaseInventory releaseInventory,
+                                 PipelineInventory pipelineInventory,
+                                 ProjectInventory projectInventory,
                                  PdfGenerator pdfGenerator,
                                  ReportInventory reportInventory) {
-        this.prsInventory = prsInventory;
-        this.releasesInventory = releasesInventory;
-        this.calculators = calculators;
+        this.pullRequestInventory = pullRequestInventory;
+        this.releaseInventory = releaseInventory;
+        this.pipelineInventory = pipelineInventory;
+        this.projectInventory = projectInventory;
+        this.metricCalculator = new ProjectMetricCalculator();
         this.pdfGenerator = pdfGenerator;
         this.reportInventory = reportInventory;
     }
 
     @Override
-    public void perform(Project project) {
-        ProjectContext projectContext = loadProjectRepositories(project);
+    public void perform(ReportCommandRequest reportCommandRequest) {
 
-        List<Metric> metrics = calculateMetrics(projectContext);
+        String projectName = reportCommandRequest.projectName();
+        List<String> repositoryNames = reportCommandRequest.repositoryNames();
 
-        byte[] pdf = generatePdf(projectContext, metrics);
+        Project project = projectInventory
+                .findByName(projectName)
+                .orElseGet(() -> fetchRepositoriesAndStoreProject(projectName, repositoryNames));
+        LOGGER.info("Project '{}' loaded successfully!", projectName);
 
-        storeReport(projectContext.name(), pdf);
+        LOGGER.info("Calculating metrics...");
+        ProjectMetric metrics = metricCalculator.apply(project);
+
+        LOGGER.info("Generating report...", projectName);
+        Report report = generateReport(projectName, metrics);
+
+        String reportPath = reportInventory.store(report);
+        LOGGER.info("Report stored under '{}'!", reportPath);
     }
 
-    private ProjectContext loadProjectRepositories(Project project) {
-        LOGGER.info("Fetching context for project '{}'", project.name());
-        List<Repository> repositories = project.repositories()
-                .stream()
-                .map(this::loadRepository)
-                .toList();
-        return new ProjectContext(
-                project.name(),
+    private Report generateReport(String projectName, ProjectMetric projectMetrics) {
+        Map<String, Object> data = Map.of("project", projectMetrics);
+        byte[] content = pdfGenerator.generate(TEMPLATE_NAME, data);
+        return new Report(projectName, "pdf", content);
+    }
+
+    private Project fetchRepositoriesAndStoreProject(String projectName, List<String> repositoryNames) {
+        LOGGER.info("Fetching repositories...");
+        List<Repository> repositories = new ArrayList<>(repositoryNames.size());
+        for (int i = 0; i < repositoryNames.size(); i++) {
+            String repositoryName = repositoryNames.get(i);
+            LOGGER.info("  → Fetching repository {}/{} : '{}'...", i + 1, repositoryNames.size(), repositoryName);
+            Repository repository = fetchRepository(repositoryName);
+            repositories.add(repository);
+        }
+        Project project = new Project(
+                projectName,
                 repositories
         );
+        projectInventory.store(project);
+        return project;
     }
 
-    private Repository loadRepository(String repositoryName) {
-        LOGGER.info("Loading context for '{}'...", repositoryName);
-        List<PullRequest> pullRequests = prsInventory.findAllByRepository(repositoryName);
-        LOGGER.info("  → {} PR(s) found", pullRequests.size());
-        List<Release> releases = releasesInventory.findAllByRepository(repositoryName);
-        LOGGER.info("  → {} release(s) found", releases.size());
+    private Repository fetchRepository(String repositoryName) {
+        List<PullRequest> pullRequests = pullRequestInventory.findAllByRepository(repositoryName);
+        LOGGER.info("    → {} PRs found", pullRequests.size());
+        List<Release> releases = releaseInventory.findAllByRepository(repositoryName);
+        LOGGER.info("    → {} releases found", releases.size());
+        List<Pipeline> pipelines = pipelineInventory.findAllByRepository(repositoryName);
+        LOGGER.info("    → {} pipelines found", pipelines.size());
         return new Repository(
                 repositoryName,
                 pullRequests,
-                releases
+                releases,
+                pipelines
         );
-    }
-
-    private List<Metric> calculateMetrics(ProjectContext projectContext) {
-        return new ArrayList<>();
-    }
-
-    private byte[] generatePdf(ProjectContext projectContext, List<Metric> metrics) {
-        LOGGER.info("Generating report of type '{}'...", REPORT_TEMPLATE);
-        Map<String, Object> data = Map.of(
-                "project", projectContext,
-                "metrics", metrics
-        );
-        return pdfGenerator.generate(REPORT_TEMPLATE, data);
-    }
-
-    private void storeReport(String projectName, byte[] pdf) {
-        String fileName = "%s-%s.pdf".formatted(REPORT_TEMPLATE, projectName);
-        String name = "%s/%s".formatted(REPORT_OUTPUT_FOLDER, fileName);
-        String path = reportInventory.store(name, pdf);
-        LOGGER.info("Report '{}' stored under '{}'...", REPORT_TEMPLATE, path);
     }
 }

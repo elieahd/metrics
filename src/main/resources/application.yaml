@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: metrics
+  main:
+    web-application-type: none
+    banner-mode: off
+
+github:
+  url: https://api.github.com
+  token: ${GITHUB_TOKEN}

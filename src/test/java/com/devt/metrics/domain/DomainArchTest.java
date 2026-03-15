@@ -21,10 +21,7 @@ class DomainArchTest {
             .onlyDependOnClassesThat()
             .resideInAnyPackage(
                     "com.devt.metrics.domain..",
-                    "java.util..",
-                    "java.time..",
-                    "java.math..",
-                    "java.lang..",
+                    "java..",
                     "org.slf4j.."
             );
 
