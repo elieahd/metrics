@@ -1,0 +1,8 @@
+name: ✅ PR checks
+
+on: pull_request
+
+jobs:
+  checks:
+    name: ✅ PR checks
+    uses: ./.github/workflows/wf-checks.yaml
