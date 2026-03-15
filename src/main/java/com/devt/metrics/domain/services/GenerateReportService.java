@@ -1,7 +1,7 @@
 package com.devt.metrics.domain.services;
 
 import com.devt.metrics.domain.inbound.GenerateReport;
-import com.devt.metrics.domain.inbound.ReportCommandRequest;
+import com.devt.metrics.domain.models.ReportCommandRequest;
 import com.devt.metrics.domain.models.entities.Pipeline;
 import com.devt.metrics.domain.models.entities.Project;
 import com.devt.metrics.domain.models.entities.PullRequest;

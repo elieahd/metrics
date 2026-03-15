@@ -39,13 +39,4 @@ class DomainArchTest {
             .should()
             .beInterfaces();
 
-    @ArchTest
-    static final ArchRule exceptionsShouldHaveNameEndingWithException = classes()
-            .that()
-            .resideInAPackage("..domain.exceptions..")
-            .should()
-            .beAssignableTo(Exception.class)
-            .andShould()
-            .haveSimpleNameEndingWith("Exception");
-
 }

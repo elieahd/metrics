@@ -1,7 +1,7 @@
 package com.devt.metrics.infrastructure.inbound.cli;
 
 import com.devt.metrics.domain.inbound.GenerateReport;
-import com.devt.metrics.domain.inbound.ReportCommandRequest;
+import com.devt.metrics.domain.models.ReportCommandRequest;
 import com.devt.metrics.infrastructure.inbound.cli.exception.MissingArgException;
 import com.devt.metrics.infrastructure.inbound.cli.helper.ApplicationArgumentsHelper;
 import org.springframework.boot.ApplicationArguments;
