@@ -5,13 +5,13 @@ import com.devt.metrics.domain.services.helper.Formatter;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
-public record CollaboratorMetric(String user,
-                                 int totalPullRequests,
-                                 int totalReviews,
-                                 OffsetDateTime firstPrDate,
-                                 OffsetDateTime lastPrDate,
-                                 boolean active,
-                                 Duration timeTo10thPr) {
+public record ContributorMetric(String user,
+                                int totalPullRequests,
+                                int totalReviews,
+                                OffsetDateTime firstPrDate,
+                                OffsetDateTime lastPrDate,
+                                boolean active,
+                                Duration timeTo10thPr) {
 
     public String firstPrDateFormatted() {
         return Formatter.format(firstPrDate);

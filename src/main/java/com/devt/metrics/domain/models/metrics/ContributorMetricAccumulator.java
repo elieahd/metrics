@@ -8,24 +8,24 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public record CollaboratorMetricAccumulator(List<PullRequest> pullRequests,
-                                            int reviewCount) {
+public record ContributorMetricAccumulator(List<PullRequest> pullRequests,
+                                           int reviewCount) {
 
-    public CollaboratorMetricAccumulator() {
+    public ContributorMetricAccumulator() {
         this(new ArrayList<>(), 0);
     }
 
-    public CollaboratorMetricAccumulator addPr(PullRequest pullRequest) {
+    public ContributorMetricAccumulator addPr(PullRequest pullRequest) {
         pullRequests.add(pullRequest);
         return this;
     }
 
-    public CollaboratorMetricAccumulator addReview() {
-        return new CollaboratorMetricAccumulator(pullRequests, reviewCount + 1);
+    public ContributorMetricAccumulator addReview() {
+        return new ContributorMetricAccumulator(pullRequests, reviewCount + 1);
     }
 
-    public CollaboratorMetric toMetric(String collaboratorName,
-                                       OffsetDateTime cutoff) {
+    public ContributorMetric toMetric(String contributorName,
+                                      OffsetDateTime cutoff) {
 
         List<PullRequest> sortedPRs = pullRequests.stream()
                 .filter(pr -> pr.mergedAt() != null)
@@ -33,11 +33,11 @@ public record CollaboratorMetricAccumulator(List<PullRequest> pullRequests,
                 .toList();
 
         if (sortedPRs.isEmpty()) {
-            return new CollaboratorMetric(collaboratorName, 0, reviewCount, null, null, false, null);
+            return new ContributorMetric(contributorName, 0, reviewCount, null, null, false, null);
         }
 
-        return new CollaboratorMetric(
-                collaboratorName,
+        return new ContributorMetric(
+                contributorName,
                 sortedPRs.size(),
                 reviewCount,
                 sortedPRs.getFirst().mergedAt(),

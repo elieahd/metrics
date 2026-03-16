@@ -55,7 +55,6 @@ public class GenerateReportService implements GenerateReport {
 
     @Override
     public void perform(ReportCommandRequest reportCommandRequest) {
-
         String projectName = reportCommandRequest.projectName();
         List<String> repositoryNames = reportCommandRequest.repositoryNames();
 
