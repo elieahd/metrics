@@ -2,8 +2,8 @@ package com.devt.metrics.domain.services.metrics;
 
 import com.devt.metrics.domain.models.entities.PullRequest;
 import com.devt.metrics.domain.models.entities.Repository;
-import com.devt.metrics.domain.models.metrics.CollaboratorMetric;
-import com.devt.metrics.domain.models.metrics.CollaboratorMetricAccumulator;
+import com.devt.metrics.domain.models.metrics.ContributorMetric;
+import com.devt.metrics.domain.models.metrics.ContributorMetricAccumulator;
 
 import java.time.OffsetDateTime;
 import java.util.Comparator;
@@ -11,22 +11,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CollaboratorMetricCalculator implements MetricCalculator<List<Repository>, List<CollaboratorMetric>> {
+public class ContributorMetricCalculator implements MetricCalculator<List<Repository>, List<ContributorMetric>> {
 
     private static final int CUT_OFF = 30;
 
     @Override
-    public List<CollaboratorMetric> apply(List<Repository> repositories) {
+    public List<ContributorMetric> apply(List<Repository> repositories) {
         OffsetDateTime cutoff = OffsetDateTime.now().minusDays(CUT_OFF);
-        Map<String, CollaboratorMetricAccumulator> acc = new HashMap<>();
+        Map<String, ContributorMetricAccumulator> acc = new HashMap<>();
         for (Repository repository : repositories) {
             for (PullRequest pullRequest : repository.pullRequests()) {
                 if (pullRequest.isAuthorUser()) {
-                    acc.computeIfAbsent(pullRequest.author(), k -> new CollaboratorMetricAccumulator())
+                    acc.computeIfAbsent(pullRequest.author(), k -> new ContributorMetricAccumulator())
                             .addPr(pullRequest);
                 }
                 for (String reviewer : pullRequest.reviewers()) {
-                    acc.computeIfAbsent(reviewer, k -> new CollaboratorMetricAccumulator())
+                    acc.computeIfAbsent(reviewer, k -> new ContributorMetricAccumulator())
                             .addReview();
                 }
             }
@@ -34,7 +34,7 @@ public class CollaboratorMetricCalculator implements MetricCalculator<List<Repos
         return acc.entrySet()
                 .stream()
                 .map(entry -> entry.getValue().toMetric(entry.getKey(), cutoff))
-                .sorted(Comparator.comparing(CollaboratorMetric::totalPullRequests).reversed())
+                .sorted(Comparator.comparing(ContributorMetric::totalPullRequests).reversed())
                 .toList();
     }
 

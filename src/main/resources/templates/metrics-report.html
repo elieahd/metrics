@@ -512,7 +512,7 @@
             color: #8b949e;
         }
 
-        /* ── Collaborator table ── */
+        /* ── Contributor table ── */
         .user-name {
             font-weight: bold;
             color: #58a6ff;
@@ -923,17 +923,17 @@
 </div>
 
 <!-- ════════════════════════════════════════════
-     COLLABORATORS PAGE
+     CONTRIBUTORS PAGE
      ════════════════════════════════════════════ -->
 
 <div class="page-break">
     <div class="table-wrapper">
         <table class="table-toolbar">
             <tr>
-                <td><span class="toolbar-title">Collaborators</span></td>
+                <td><span class="toolbar-title">Contributors</span></td>
                 <td class="toolbar-right">
                     <span class="count-badge"
-                          th:text="${project.collaborators().size() + ' members'}">0 members</span>
+                          th:text="${project.contributors().size() + ' members'}">0 members</span>
                 </td>
             </tr>
         </table>
@@ -950,32 +950,32 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="collab : ${project.collaborators()}">
-                <td><span class="user-name" th:text="${collab.user()}">username</span></td>
+            <tr th:each="contributor : ${project.contributors()}">
+                <td><span class="user-name" th:text="${contributor.user()}">username</span></td>
                 <td class="center">
-                    <span class="badge-active" th:if="${collab.active()}">Active</span>
-                    <span class="badge-inactive" th:unless="${collab.active()}">Inactive</span>
+                    <span class="badge-active" th:if="${contributor.active()}">Active</span>
+                    <span class="badge-inactive" th:unless="${contributor.active()}">Inactive</span>
                 </td>
                 <td class="center">
                     <span class="pill pill-pr"
-                          th:text="${collab.totalPullRequests()}">0</span>
+                          th:text="${contributor.totalPullRequests()}">0</span>
                 </td>
                 <td class="center">
                     <span class="pill pill-pipeline"
-                          th:text="${collab.totalReviews() }">0</span>
+                          th:text="${contributor.totalReviews() }">0</span>
                 </td>
                 <td><span class="date-text"
-                          th:text="${collab.firstPrDateFormatted()}">-</span>
+                          th:text="${contributor.firstPrDateFormatted()}">-</span>
                 </td>
                 <td><span class="date-text"
-                          th:text="${collab.lastPrDateFormatted()}">-</span>
+                          th:text="${contributor.lastPrDateFormatted()}">-</span>
                 </td>
                 <td><span class="date-text"
-                          th:text="${collab.timeTo10thPrDateFormatted()}">-</span>
+                          th:text="${contributor.timeTo10thPrDateFormatted()}">-</span>
                 </td>
             </tr>
-            <tr th:if="${project.collaborators() == null or project.collaborators().isEmpty()}">
-                <td class="empty-cell" colspan="7">No collaborators found for this project.</td>
+            <tr th:if="${project.contributors() == null or project.contributors().isEmpty()}">
+                <td class="empty-cell" colspan="7">No contributors found for this project.</td>
             </tr>
             </tbody>
         </table>
