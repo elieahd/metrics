@@ -30,7 +30,7 @@ class DurationFormatterTest {
 
     @ParameterizedTest
     @MethodSource("provideDurationTransformations")
-    void shouldTransformDuration(Duration input, String expected) {
+    void format_shouldTransformDuration(Duration input, String expected) {
         // Act
         String result = Formatter.format(input);
         // Assert
@@ -38,7 +38,7 @@ class DurationFormatterTest {
     }
 
     @Test
-    void shouldReturnBlankWhenTransformingNullDuration() {
+    void format_shouldReturnBlank_whenInputIsNull() {
         // Arrange
         Duration input = null;
         // Act

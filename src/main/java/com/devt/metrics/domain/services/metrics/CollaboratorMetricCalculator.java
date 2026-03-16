@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CollaboratorMetricCalculator implements MetricCalculator<List<Repository>, List<CollaboratorMetric>> {
 
-    private static final Integer CUT_OFF = 30;
+    private static final int CUT_OFF = 30;
 
     @Override
     public List<CollaboratorMetric> apply(List<Repository> repositories) {

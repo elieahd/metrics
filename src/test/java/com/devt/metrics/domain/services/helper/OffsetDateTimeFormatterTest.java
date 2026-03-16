@@ -24,7 +24,7 @@ class OffsetDateTimeFormatterTest {
 
     @ParameterizedTest
     @MethodSource("provideOffsetDateTimeTransformations")
-    void shouldTransformOffsetDateTime(OffsetDateTime input, String expected) {
+    void format_shouldTransformOffsetDateTime(OffsetDateTime input, String expected) {
         // Act
         String result = Formatter.format(input);
         // Assert
@@ -34,7 +34,7 @@ class OffsetDateTimeFormatterTest {
     }
 
     @Test
-    void shouldReturnBlankWhenTransformingNullOffsetDateTime() {
+    void format_shouldReturnBlank_whenInputIsNull() {
         // Arrange
         OffsetDateTime input = null;
         // Act

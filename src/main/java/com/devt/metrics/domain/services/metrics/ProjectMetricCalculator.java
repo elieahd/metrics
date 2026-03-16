@@ -6,9 +6,11 @@ import com.devt.metrics.domain.models.metrics.CollaboratorMetric;
 import com.devt.metrics.domain.models.metrics.DeploymentMetric;
 import com.devt.metrics.domain.models.metrics.ProjectMetric;
 import com.devt.metrics.domain.models.metrics.RepositoryMetric;
+import com.devt.metrics.domain.services.DomainService;
 
 import java.util.List;
 
+@DomainService
 public class ProjectMetricCalculator implements MetricCalculator<Project, ProjectMetric> {
 
     private final MetricCalculator<Repository, RepositoryMetric> repositoriesCalculator;

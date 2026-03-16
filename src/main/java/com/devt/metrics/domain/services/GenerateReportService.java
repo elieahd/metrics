@@ -16,7 +16,6 @@ import com.devt.metrics.domain.outbound.PullRequestInventory;
 import com.devt.metrics.domain.outbound.ReleaseInventory;
 import com.devt.metrics.domain.outbound.ReportInventory;
 import com.devt.metrics.domain.services.metrics.MetricCalculator;
-import com.devt.metrics.domain.services.metrics.ProjectMetricCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,13 +41,14 @@ public class GenerateReportService implements GenerateReport {
                                  ReleaseInventory releaseInventory,
                                  PipelineInventory pipelineInventory,
                                  ProjectInventory projectInventory,
+                                 MetricCalculator<Project, ProjectMetric> metricCalculator,
                                  PdfGenerator pdfGenerator,
                                  ReportInventory reportInventory) {
         this.pullRequestInventory = pullRequestInventory;
         this.releaseInventory = releaseInventory;
         this.pipelineInventory = pipelineInventory;
         this.projectInventory = projectInventory;
-        this.metricCalculator = new ProjectMetricCalculator();
+        this.metricCalculator = metricCalculator;
         this.pdfGenerator = pdfGenerator;
         this.reportInventory = reportInventory;
     }
@@ -67,7 +67,7 @@ public class GenerateReportService implements GenerateReport {
         LOGGER.info("Calculating metrics...");
         ProjectMetric metrics = metricCalculator.apply(project);
 
-        LOGGER.info("Generating report...", projectName);
+        LOGGER.info("Generating report for '{}'...", projectName);
         Report report = generateReport(projectName, metrics);
 
         String reportPath = reportInventory.store(report);
@@ -81,6 +81,13 @@ public class GenerateReportService implements GenerateReport {
     }
 
     private Project fetchRepositoriesAndStoreProject(String projectName, List<String> repositoryNames) {
+        List<Repository> repositories = fetchRepositories(repositoryNames);
+        Project project = new Project(projectName, repositories);
+        projectInventory.store(project);
+        return project;
+    }
+
+    private List<Repository> fetchRepositories(List<String> repositoryNames) {
         LOGGER.info("Fetching repositories...");
         List<Repository> repositories = new ArrayList<>(repositoryNames.size());
         for (int i = 0; i < repositoryNames.size(); i++) {
@@ -89,12 +96,7 @@ public class GenerateReportService implements GenerateReport {
             Repository repository = fetchRepository(repositoryName);
             repositories.add(repository);
         }
-        Project project = new Project(
-                projectName,
-                repositories
-        );
-        projectInventory.store(project);
-        return project;
+        return repositories;
     }
 
     private Repository fetchRepository(String repositoryName) {
