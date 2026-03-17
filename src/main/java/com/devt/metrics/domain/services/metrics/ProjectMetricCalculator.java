@@ -2,7 +2,7 @@ package com.devt.metrics.domain.services.metrics;
 
 import com.devt.metrics.domain.models.entities.Project;
 import com.devt.metrics.domain.models.entities.Repository;
-import com.devt.metrics.domain.models.metrics.ContributorMetric;
+import com.devt.metrics.domain.models.metrics.ContributionsMetrics;
 import com.devt.metrics.domain.models.metrics.DeploymentMetric;
 import com.devt.metrics.domain.models.metrics.ProjectMetric;
 import com.devt.metrics.domain.models.metrics.RepositoryMetric;
@@ -14,12 +14,12 @@ import java.util.List;
 public class ProjectMetricCalculator implements MetricCalculator<Project, ProjectMetric> {
 
     private final MetricCalculator<Repository, RepositoryMetric> repositoriesCalculator;
-    private final MetricCalculator<List<Repository>, List<ContributorMetric>> contributorsCalculator;
+    private final MetricCalculator<List<Repository>, ContributionsMetrics> contributorsCalculator;
     private final MetricCalculator<List<RepositoryMetric>, DeploymentMetric> deploymentsCalculator;
 
     public ProjectMetricCalculator() {
         this.repositoriesCalculator = new RepositoryMetricCalculator();
-        this.contributorsCalculator = new ContributorMetricCalculator();
+        this.contributorsCalculator = new ContributionMetricCalculator();
         this.deploymentsCalculator = new DeploymentMetricCalculator();
     }
 
@@ -29,12 +29,12 @@ public class ProjectMetricCalculator implements MetricCalculator<Project, Projec
                 .stream()
                 .map(repositoriesCalculator::apply)
                 .toList();
-        List<ContributorMetric> contributors = contributorsCalculator.apply(project.repositories());
+        ContributionsMetrics contributions = contributorsCalculator.apply(project.repositories());
         DeploymentMetric deployments = deploymentsCalculator.apply(repositories);
         return new ProjectMetric(
                 project.name(),
                 repositories,
-                contributors,
+                contributions,
                 deployments
         );
     }

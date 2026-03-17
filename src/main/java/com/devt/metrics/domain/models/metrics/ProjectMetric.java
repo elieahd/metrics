@@ -4,6 +4,6 @@ import java.util.List;
 
 public record ProjectMetric(String name,
                             List<RepositoryMetric> repositories,
-                            List<ContributorMetric> contributors,
+                            ContributionsMetrics contributions,
                             DeploymentMetric deployments) {
 }

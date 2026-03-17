@@ -5,7 +5,7 @@ import com.devt.metrics.domain.services.helper.Formatter;
 import java.time.OffsetDateTime;
 
 public record ReleaseMetric(String version,
-                            boolean isChange,
+                            boolean isPlanned,
                             OffsetDateTime publishedAt) {
 
     public String publishedAtFormatted() {

@@ -116,7 +116,8 @@ public class GitHubClientAdapter implements GitHubClient {
             if (response.body() == null) {
                 return new GitHubResponse<>(null, null);
             }
-            T data = mapper.readValue(response.body().string(), typeReference);
+            String json = response.body().string();
+            T data = mapper.readValue(json, typeReference);
             return new GitHubResponse<>(data, nextUrl(response));
         } catch (IOException e) {
             throw new GitHubException(e);
