@@ -8,20 +8,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public record ContributorMetricAccumulator(List<PullRequest> pullRequests,
-                                           int reviewCount) {
+public class ContributorMetricAccumulator {
+
+    private final List<PullRequest> pullRequests;
+    private int reviewCount;
 
     public ContributorMetricAccumulator() {
-        this(new ArrayList<>(), 0);
+        this.pullRequests = new ArrayList<>();
+        this.reviewCount = 0;
     }
 
-    public ContributorMetricAccumulator addPr(PullRequest pullRequest) {
+    public void addPr(PullRequest pullRequest) {
         pullRequests.add(pullRequest);
-        return this;
     }
 
-    public ContributorMetricAccumulator addReview() {
-        return new ContributorMetricAccumulator(pullRequests, reviewCount + 1);
+    public void addReview() {
+        reviewCount++;
     }
 
     public ContributorMetric toMetric(String contributorName,
@@ -46,4 +48,6 @@ public record ContributorMetricAccumulator(List<PullRequest> pullRequests,
                 sortedPRs.size() >= 10 ? Duration.between(sortedPRs.getFirst().mergedAt(), sortedPRs.get(9).mergedAt()) : null
         );
     }
+
 }
+

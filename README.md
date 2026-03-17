@@ -1,6 +1,5 @@
-A command-line tool that generates development metrics reports from one or more Git repositories. It analyses pull
-requests, releases, and CI/CD pipelines to surface contribution patterns, deployment health, and team activity over
-time.
+A tool that generates development metrics reports from one or more Git repositories pull requests, releases and
+pipelines.
 
 ## Commands
 
@@ -10,13 +9,11 @@ Every invocation requires the following global argument:
 |-------------|----------|------------------------------------|
 | `--command` | Yes      | The name of the command to execute |
 
- 
----
-
 ### `generate-report`
 
-Generates a development metrics report for a given project, using one or more Git repositories as input. Results are
-cached — subsequent runs for the same project load from cache instead of re-fetching.
+Generates a development metrics report for a given project, using one or more Git repositories as input.
+
+Results are cached, subsequent runs for the same project load from cache instead of re-fetching.
 
 **Arguments:**
 
@@ -28,7 +25,7 @@ cached — subsequent runs for the same project load from cache instead of re-fe
 **Usage:**
 
 ```
---command=generate-report --name=<project> --repos=<repo1> --repos=<repo2>
+--command=generate-report --name=<project> --repos=<org>/<repo1> --repos=<org>/<repo2>
 ```
 
 **Single repository:**
@@ -36,8 +33,8 @@ cached — subsequent runs for the same project load from cache instead of re-fe
 ```bash
 java -jar metrics.jar \
   --command=generate-report \
-  --name=my-service \
-  --repos=my-org/my-service
+  --name=MyProject \
+  --repos=my-org/repo-a
 ```
 
 **Multiple repositories:**
@@ -51,7 +48,6 @@ java -jar metrics.jar \
   --repos=my-org/repo-c
 ```
 
- 
 ---
 
 ## How It Works
@@ -119,9 +115,6 @@ For each pipeline definition:
 | Success rate         | Percentage of runs that succeeded |
 | Average run duration | Mean duration across all runs     |
 
- 
----
-
 ### Contribution Metrics
 
 Aggregated per contributor across all tracked repositories.
@@ -135,21 +128,18 @@ Aggregated per contributor across all tracked repositories.
 | Active status   | `true` if the most recent PR is less than 30 days old |
 | Time to 10th PR | Duration between the first and 10th merged PR         |
 
- 
----
-
 ### Deployment Metrics
 
 Aggregated across all repositories in the project.
 
-| Metric                    | Description                          |
-|---------------------------|--------------------------------------|
-| Total changes             | Number of `x.y.0` releases           |
-| Total hotfixes            | Number of releases with patch `!= 0` |
-| Total deployments         | Total changes + total hotfixes       |
-| Change Failure Rate (CFR) | `hotfixes / deployments`             |
+| Metric            | Description                                |
+|-------------------|--------------------------------------------|
+| Total changes     | Number of `x.y.0` releases                 |
+| Total hotfixes    | Number of releases with patch `!= 0`       |
+| Total deployments | Total changes + total hotfixes             |
+| Hotfix Ratio      | % of releases that are hotfixes vs planned | todo replace CFR
+| Cadence           |                                            | todo 
 
- 
 ---
 
 ## Data Model
@@ -207,3 +197,6 @@ classDiagram
     Pipeline "1" *-- "many" PipelineRun: has
     PullRequest "1" *-- "many" PullRequestReview: has
 ```
+
+## Backlog
+- [ ] lead time for changes 

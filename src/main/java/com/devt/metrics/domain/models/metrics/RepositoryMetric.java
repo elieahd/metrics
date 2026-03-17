@@ -7,5 +7,6 @@ public record RepositoryMetric(String name,
                                int totalReleases,
                                int totalPipelines,
                                List<ReleaseMetric> releases,
-                               List<PipelineMetric> pipelines) {
+                               List<PipelineMetric> pipelines,
+                               PullRequestMetric pullRequests) {
 }

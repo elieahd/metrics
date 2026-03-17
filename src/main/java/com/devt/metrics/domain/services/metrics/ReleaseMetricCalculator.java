@@ -10,11 +10,11 @@ public class ReleaseMetricCalculator implements MetricCalculator<Release, Releas
 
         String version = release.tagName().replace("-rc", "");
 
-        boolean isChange = version.endsWith(".0");
+        boolean isPlanned = version.endsWith(".0");
 
         return new ReleaseMetric(
                 version,
-                isChange,
+                isPlanned,
                 release.publishedAt()
         );
     }
