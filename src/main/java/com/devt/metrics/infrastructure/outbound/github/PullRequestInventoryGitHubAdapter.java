@@ -44,7 +44,7 @@ public class PullRequestInventoryGitHubAdapter implements PullRequestInventory {
                 pullRequest.mergedAt(),
                 pullRequest.closedAt(),
                 pullRequest.user() != null ? pullRequest.user().login() : null,
-                pullRequest.user() != null ? pullRequest.user().isUser() : false,
+                pullRequest.user() != null && pullRequest.user().isUser(),
                 reviews
         );
     }
