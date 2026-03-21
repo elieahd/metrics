@@ -21,7 +21,7 @@ public class FrequencyMetricCalculator implements MetricCalculator<List<OffsetDa
                 ? 0.0
                 : (double) deploymentDates.size() / frequencies.size();
 
-        DeploymentFrequencyLevel level = level(deploymentsPerPeriod);
+        DeploymentFrequencyLevel level = DeploymentFrequencyLevel.of(deploymentsPerPeriod);
 
         return new DeploymentFrequencyMetric(
                 deploymentsPerPeriod,
@@ -30,18 +30,6 @@ public class FrequencyMetricCalculator implements MetricCalculator<List<OffsetDa
         );
     }
 
-    private DeploymentFrequencyLevel level(double average) {
-        if (average > 90) {
-            return DeploymentFrequencyLevel.ELITE;
-        }
-        if (average > 13) {
-            return DeploymentFrequencyLevel.HIGH;
-        }
-        if (average > 3) {
-            return DeploymentFrequencyLevel.MEDIUM;
-        }
-        return DeploymentFrequencyLevel.LOW;
-    }
 
     private List<DeploymentFrequencyEntry> frequencies(List<OffsetDateTime> deploymentsDates) {
         if (deploymentsDates.isEmpty()) {

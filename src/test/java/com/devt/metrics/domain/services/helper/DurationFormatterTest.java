@@ -28,6 +28,22 @@ class DurationFormatterTest {
         );
     }
 
+    private static Stream<Arguments> provideDurationTransformationsInDaysAndHours() {
+        return Stream.of(
+                Arguments.of(Duration.ZERO, "0h"),
+                Arguments.of(Duration.ofSeconds(45), "0h"),
+                Arguments.of(Duration.ofMinutes(5).plusSeconds(30), "0h"),
+                Arguments.of(Duration.ofHours(23).plusMinutes(59).plusSeconds(59), "23h"),
+                Arguments.of(Duration.ofMinutes(10), "0h"),
+                Arguments.of(Duration.ofHours(2).plusMinutes(15).plusSeconds(10), "2h"),
+                Arguments.of(Duration.ofHours(3), "3h"),
+                Arguments.of(Duration.ofDays(1).plusHours(4).plusMinutes(30).plusSeconds(20), "1d 4h"),
+                Arguments.of(Duration.ofDays(2), "2d"),
+                Arguments.of(Duration.ofDays(5).plusHours(23).plusMinutes(59).plusSeconds(59), "5d 23h"),
+                Arguments.of(Duration.ofMinutes(59).plusSeconds(59), "0h")
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("provideDurationTransformations")
     void format_shouldTransformDuration(Duration input, String expected) {
@@ -43,6 +59,27 @@ class DurationFormatterTest {
         Duration input = null;
         // Act
         String result = Formatter.format(input);
+        // Assert
+        assertThat(result)
+                .isNotNull()
+                .isBlank();
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideDurationTransformationsInDaysAndHours")
+    void formatInDaysAndHours_shouldTransformDuration(Duration input, String expected) {
+        // Act
+        String result = Formatter.formatInDaysAndHours(input);
+        // Assert
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void formatInDaysAndHours_shouldReturnBlank_whenInputIsNull() {
+        // Arrange
+        Duration input = null;
+        // Act
+        String result = Formatter.formatInDaysAndHours(input);
         // Assert
         assertThat(result)
                 .isNotNull()

@@ -9,6 +9,9 @@ public record PipelineRun(boolean success,
                           OffsetDateTime updatedAt) {
 
     public Duration duration() {
+        if (startedAt == null || updatedAt == null) {
+            return Duration.ZERO;
+        }
         return Duration.between(startedAt, updatedAt);
     }
 }
