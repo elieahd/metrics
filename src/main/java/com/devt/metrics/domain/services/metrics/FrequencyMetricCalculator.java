@@ -44,7 +44,7 @@ public class FrequencyMetricCalculator implements MetricCalculator<List<OffsetDa
 
         OffsetDateTime start = deploymentsDates.stream()
                 .min(OffsetDateTime::compareTo)
-                .get();
+                .orElse(OffsetDateTime.now());
 
         OffsetDateTime now = OffsetDateTime.now();
 
