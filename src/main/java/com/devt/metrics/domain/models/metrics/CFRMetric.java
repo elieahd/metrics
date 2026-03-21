@@ -5,10 +5,6 @@ import com.devt.metrics.domain.models.levels.CFRLevel;
 public record CFRMetric(double value,
                         CFRLevel level) {
 
-    public double percentage() {
-        return value * 100.0;
-    }
-
     public boolean isElite() {
         return CFRLevel.ELITE.equals(level);
     }

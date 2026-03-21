@@ -1,5 +1,6 @@
 package com.devt.metrics.domain.services.metrics;
 
+import com.devt.metrics.domain.models.levels.CFRLevel;
 import com.devt.metrics.domain.models.metrics.CFRMetric;
 import com.devt.metrics.domain.models.metrics.DeploymentFrequencyMetric;
 import com.devt.metrics.domain.models.metrics.DeploymentMetric;
@@ -12,11 +13,9 @@ import java.util.List;
 
 public class DeploymentMetricCalculator implements MetricCalculator<List<RepositoryMetric>, DeploymentMetric> {
 
-    private final MetricCalculator<Double, CFRMetric> cfrCalculator;
     private final MetricCalculator<List<OffsetDateTime>, DeploymentFrequencyMetric> frequencyCalculator;
 
     public DeploymentMetricCalculator() {
-        this.cfrCalculator = new CFRMetricCalculator();
         this.frequencyCalculator = new FrequencyMetricCalculator();
     }
 
@@ -45,7 +44,8 @@ public class DeploymentMetricCalculator implements MetricCalculator<List<Reposit
                 ? (double) hotfixes / deployments
                 : 0.0;
 
-        CFRMetric cfrMetric = cfrCalculator.apply(hotfixRatio);
+        CFRLevel level = CFRLevel.of(hotfixRatio);
+        CFRMetric cfrMetric = new CFRMetric(hotfixRatio, level);
 
         DeploymentFrequencyMetric frequencyMetric = frequencyCalculator.apply(deploymentsDates);
 

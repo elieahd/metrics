@@ -1,10 +1,17 @@
 package com.devt.metrics.domain.models;
 
+import com.devt.metrics.domain.models.entities.PipelineRun;
 import com.devt.metrics.domain.models.entities.PullRequest;
 import com.devt.metrics.domain.models.entities.PullRequestReview;
+import com.devt.metrics.domain.models.levels.CFRLevel;
+import com.devt.metrics.domain.models.levels.DeploymentFrequencyLevel;
+import com.devt.metrics.domain.models.metrics.CFRMetric;
+import com.devt.metrics.domain.models.metrics.DeploymentFrequencyEntry;
+import com.devt.metrics.domain.models.metrics.DeploymentFrequencyMetric;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static com.devt.randomizer.RandomizerUtils.random;
 
@@ -39,6 +46,71 @@ public class ModelRandomizer {
                 user,
                 random(String.class),
                 random(OffsetDateTime.class)
+        );
+    }
+
+    public static PipelineRun aPipelineRun(OffsetDateTime startedAt,
+                                           OffsetDateTime updatedAt) {
+        return new PipelineRun(
+                random(boolean.class),
+                startedAt,
+                random(OffsetDateTime.class),
+                updatedAt
+        );
+    }
+
+    public static PipelineRun aPipelineRun() {
+        return aPipelineRun(
+                random(OffsetDateTime.class),
+                random(OffsetDateTime.class)
+        );
+    }
+
+    public static CFRMetric aCFRMetric(CFRLevel level) {
+        return new CFRMetric(
+                random(double.class),
+                level
+        );
+    }
+
+    public static CFRMetric aCFRMetric() {
+        return aCFRMetric(
+                random(CFRLevel.class)
+        );
+    }
+
+    public static DeploymentFrequencyMetric aDeploymentFrequencyMetric() {
+        return aDeploymentFrequencyMetric(
+                random(DeploymentFrequencyLevel.class)
+        );
+    }
+
+    public static DeploymentFrequencyMetric aDeploymentFrequencyMetric(DeploymentFrequencyLevel level) {
+        return new DeploymentFrequencyMetric(
+                random(double.class),
+                IntStream.range(0, 10).mapToObj(_ -> aDeploymentFrequencyEntry()).toList(),
+                level
+        );
+    }
+
+    public static DeploymentFrequencyMetric aDeploymentFrequencyMetric(DeploymentFrequencyEntry... frequencies) {
+        return new DeploymentFrequencyMetric(
+                random(double.class),
+                List.of(frequencies),
+                random(DeploymentFrequencyLevel.class)
+        );
+    }
+
+    public static DeploymentFrequencyEntry aDeploymentFrequencyEntry() {
+        return aDeploymentFrequencyEntry(
+                random(int.class)
+        );
+    }
+
+    public static DeploymentFrequencyEntry aDeploymentFrequencyEntry(int count) {
+        return new DeploymentFrequencyEntry(
+                random(String.class),
+                count
         );
     }
 

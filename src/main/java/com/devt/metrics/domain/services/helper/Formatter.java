@@ -52,7 +52,15 @@ public class Formatter {
         long days = input.toDaysPart();
         long hours = input.toHoursPart();
 
-        return "%dd %dh".formatted(days, hours);
+        if (days > 0) {
+            if (hours == 0) {
+                return "%dd".formatted(days);
+            }
+            return "%dd %dh".formatted(days, hours);
+        }
+
+        return "%dh".formatted(hours);
+
     }
 
 }
