@@ -11,7 +11,7 @@ import java.util.List;
 public class ContributorMetricAccumulator {
 
     private final List<PullRequest> pullRequests;
-    private int reviewCount;
+    private long reviewCount;
 
     public ContributorMetricAccumulator() {
         this.pullRequests = new ArrayList<>();

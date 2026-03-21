@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<table class="stats-table section" th:fragment="stats"
+       th:with="
+           totalRepos = ${project.repositories().size()},
+           totalPRs   = ${#aggregates.sum(project.repositories().![totalPRs])},
+           totalRel   = ${#aggregates.sum(project.repositories().![totalReleases])},
+           totalPip   = ${#aggregates.sum(project.repositories().![totalPipelines])}">
+    <tr>
+        <td class="stat-card">
+            <div class="stat-label">Repositories</div>
+            <div class="stat-value blue" th:text="${totalRepos}">0</div>
+        </td>
+        <td class="stat-card">
+            <div class="stat-label">Pull Requests</div>
+            <div class="stat-value orange" th:text="${totalPRs}">0</div>
+        </td>
+        <td class="stat-card">
+            <div class="stat-label">Releases</div>
+            <div class="stat-value green" th:text="${totalRel}">0</div>
+        </td>
+        <td class="stat-card">
+            <div class="stat-label">Pipelines</div>
+            <div class="stat-value purple" th:text="${totalPip}">0</div>
+        </td>
+    </tr>
+</table>
+
+<div class="table-container" th:fragment="repositories">
+    <table class="table-header">
+        <tr>
+            <td><span class="table-header-title">Repositories</span></td>
+            <td class="right">
+                <span class="badge"
+                      th:text="${project.repositories().size() + ' repos'}">0 repos</span>
+            </td>
+        </tr>
+    </table>
+    <table class="table-data">
+        <thead>
+        <tr>
+            <th>Repository</th>
+            <th class="center">Pull Requests</th>
+            <th class="center">Releases</th>
+            <th class="center">Pipelines</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="repo : ${project.repositories()}">
+            <td>
+                <span th:text="${repo.name()}">repository-name</span>
+            </td>
+            <td class="center">
+                <span class="pill pill-orange" th:text="${repo.totalPRs()}">0</span>
+            </td>
+            <td class="center">
+                <span class="pill pill-green" th:text="${repo.totalReleases()}">0</span>
+            </td>
+            <td class="center">
+                <span class="pill pill-purple" th:text="${repo.totalPipelines()}">0</span>
+            </td>
+        </tr>
+        <tr th:if="${project.repositories() == null or project.repositories().isEmpty()}">
+            <td colspan="4">No repositories found for this project.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+

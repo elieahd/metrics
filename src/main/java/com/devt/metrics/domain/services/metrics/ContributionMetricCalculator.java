@@ -19,6 +19,7 @@ public class ContributionMetricCalculator implements MetricCalculator<List<Repos
 
     @Override
     public ContributionsMetrics apply(List<Repository> repositories) {
+
         OffsetDateTime cutoff = OffsetDateTime.now().minusDays(CUT_OFF);
         Map<String, ContributorMetricAccumulator> acc = new HashMap<>();
         for (Repository repository : repositories) {
@@ -40,16 +41,21 @@ public class ContributionMetricCalculator implements MetricCalculator<List<Repos
                 .sorted(Comparator.comparing(ContributorMetric::totalPullRequests).reversed())
                 .toList();
 
-        Duration averageTimeTo10thPR = contributors.stream()
+        List<Duration> timeTo10thPRs = contributors.stream()
                 .map(ContributorMetric::timeTo10thPr)
-                .filter(d -> !d.isZero())
-                .reduce(Duration.ZERO, Duration::plus)
-                .dividedBy(contributors.stream()
-                        .map(ContributorMetric::timeTo10thPr)
-                        .filter(d -> !d.isZero())
-                        .count());
+                .filter(timeTo10thPR -> timeTo10thPR != null && !timeTo10thPR.isZero())
+                .toList();
+
+        Duration averageTimeTo10thPR = !timeTo10thPRs.isEmpty()
+                ? timeTo10thPRs.stream().reduce(Duration.ZERO, Duration::plus).dividedBy(timeTo10thPRs.size())
+                : Duration.ZERO;
+
+        long totalContributors = contributors.size();
+        long totalActiveContributors = contributors.stream().filter(ContributorMetric::active).count();
 
         return new ContributionsMetrics(
+                totalContributors,
+                totalActiveContributors,
                 averageTimeTo10thPR,
                 contributors
         );

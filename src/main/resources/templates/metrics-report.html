@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="${project.name() + ' - Repository Report'}">Project Report</title>
+    <title th:text="${project.name() + ' Report'}">Project Report</title>
     <style>
         @page {
             margin: 0;
@@ -10,152 +10,75 @@
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
+            color: #e6edf3;
             font-family: Arial, Helvetica, sans-serif;
             background: #0d1117;
-            color: #e6edf3;
             padding: 48px 32px;
         }
 
-        /* ── Page break ── */
-        .page-break {
-            page-break-before: always;
-            padding-top: 48px;
-        }
-
-        /* ── Header ── */
-        .report-header {
+        .w-100 {
             width: 100%;
-            margin-bottom: 40px;
         }
 
-        .report-header-table {
-            width: 100%;
-            border-collapse: collapse;
+        .mt-xs {
+            margin: 10px;
         }
 
-        .report-title {
-            font-size: 26px;
+        .mb-s {
+            margin-bottom: 10px;
+        }
+
+        .mt-s {
+            margin-top: 10px;
+        }
+
+        .ml-xs {
+            margin-left: 5px;
+        }
+
+        .ml-s {
+            margin-left: 15px;
+        }
+
+        .mr-s {
+            margin-right: 10px;
+        }
+
+        .ml-m {
+            margin-left: 30px;
+        }
+
+        .code {
+            font-size: 14px;
             font-weight: bold;
-            color: #e6edf3;
+            font-family: 'monospace';
         }
 
-        .report-subtitle {
-            font-size: 13px;
-            color: #8b949e;
-            margin-top: 4px;
+        .center {
+            text-align: center;
         }
 
-        .report-meta {
+        .right {
             text-align: right;
-            font-size: 12px;
-            color: #8b949e;
-            line-height: 1.8;
-            vertical-align: top;
         }
 
-        .report-meta span {
-            color: #58a6ff;
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* ── Notice block ── */
-        .notice {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-left: 4px solid #8b949e;
-            border-radius: 6px;
-            padding: 16px 20px;
-            margin-bottom: 32px;
-        }
-
-        .notice-title {
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #8b949e;
-            margin-bottom: 10px;
-        }
-
-        .notice-intro {
-            font-size: 12px;
-            color: #8b949e;
-            line-height: 1.7;
-            margin-bottom: 10px;
-        }
-
-        .notice-laws-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-
-        .notice-laws-table tr td {
-            padding: 3px 0;
-            vertical-align: top;
-            border: none;
-            background: transparent;
-            color: inherit;
-            font-size: 12px;
-        }
-
-        .law-label {
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: #58a6ff;
+        .right {
             white-space: nowrap;
-            padding-right: 12px;
-            width: 130px;
+            margin-left: 1rem;
         }
 
-        .law-quote {
-            color: #c9d1d9;
-            font-style: italic;
-            line-height: 1.6;
-        }
 
-        .notice-footer {
-            font-size: 12px;
-            color: #8b949e;
-            line-height: 1.7;
-        }
-
-        /* ── Stats cards — table-based ── */
-        .stats-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 12px 0;
-            margin-bottom: 32px;
-            margin-left: -12px;
-            width: calc(100% + 12px);
-        }
-
-        .stat-card {
-            background: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 8px;
-            padding: 16px 20px;
-            vertical-align: top;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #8b949e;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-size: 26px;
-            font-weight: bold;
-        }
+        /** COLORS **/
 
         .blue {
             color: #58a6ff;
@@ -177,59 +100,56 @@
             color: #f85149;
         }
 
-        /* ── Section gap ── */
-        .section-gap {
-            margin-top: 32px;
-        }
-
-        /* ── Page section header ── */
-        .repo-page-header {
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid #21262d;
-        }
-
-        .repo-page-title {
-            font-size: 20px;
+        .pill {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 13px;
             font-weight: bold;
+        }
+
+        .pill-orange {
+            background: #2d2008;
+            color: #d29922;
+            border: 1px solid #5a3e0a;
+        }
+
+        .pill-green {
+            background: #0d2414;
+            color: #3fb950;
+            border: 1px solid #1a4d26;
+        }
+
+        .pill-red {
+            background: #3d0c09;
+            color: #f85149;
+            border: 1px solid #6d1a16;
+        }
+
+        .pill-purple {
+            background: #1e0d33;
+            color: #bc8cff;
+            border: 1px solid #4a2080;
+        }
+
+        .pill-blue {
+            background: #1f2d3d;
             color: #58a6ff;
+            border: 1px solid #203680;
         }
 
-        /* ── Shared table styles ── */
-        .table-wrapper {
-            background: #161b22;
-            border: 1px solid #21262d;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .table-toolbar {
-            width: 100%;
-            border-collapse: collapse;
-            border-bottom: 1px solid #21262d;
-        }
-
-        .table-toolbar td {
-            padding: 14px 20px;
-            vertical-align: middle;
-            border: none;
-            background: transparent;
-            color: inherit;
-        }
-
-        .toolbar-title {
-            font-size: 12px;
-            font-weight: bold;
+        .pill-gray {
+            background: #1c1c1c;
             color: #8b949e;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
+            border: 1px solid #30363d;
         }
 
-        .toolbar-right {
-            text-align: right;
+        .subtext {
+            font-size: 12px;
+            color: #8b949e;
         }
 
-        .count-badge {
+        .badge {
             background: #1f2d3d;
             color: #58a6ff;
             border: 1px solid #58a6ff;
@@ -238,12 +158,86 @@
             font-size: 12px;
         }
 
-        table.data-table {
+        /** SECTIONS **/
+        .page-break {
+            page-break-before: always;
+            padding-top: 48px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .header {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .legend {
+            font-size: 12px;
+            color: #8a8a9a;
+        }
+
+        .bottom-line {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #21262d;
+        }
+
+        /** TABLE **/
+        .table {
+            width: 100%;
+        }
+
+        .table td {
+            padding: 7px 10px;
+        }
+
+        .table-header {
+            width: 100%;
+            border-collapse: collapse;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .table-header td {
+            padding: 14px 20px;
+            vertical-align: middle;
+            border: none;
+            background: transparent;
+            color: inherit;
+        }
+
+        .table-header-title {
+            font-weight: bold;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .table-container {
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-data {
             width: 100%;
             border-collapse: collapse;
         }
 
-        table.data-table thead th {
+        .table-data thead th {
             padding: 12px 20px;
             font-size: 11px;
             text-transform: uppercase;
@@ -253,24 +247,16 @@
             border-bottom: 1px solid #21262d;
         }
 
-        table.data-table thead th.center {
+        .table-data thead th.center {
             text-align: center;
         }
 
-        table.data-table thead th.right {
-            text-align: right;
-        }
-
-        table.data-table tbody tr {
-            border-bottom: 1px solid #21262d;
-        }
-
-        table.data-table tbody tr:last-child {
+        .table-data tbody tr:last-child {
             border-bottom: none;
         }
 
-        table.data-table td {
-            padding: 12px 20px;
+        .table-data td {
+            padding: 8px 14px;
             font-size: 14px;
             vertical-align: middle;
             color: #e6edf3;
@@ -278,1125 +264,102 @@
             background: transparent;
         }
 
-        table.data-table td.center {
+        .no-data {
             text-align: center;
-        }
-
-        table.data-table td.right {
-            text-align: right;
-        }
-
-        /* ── Pills ── */
-        .pill {
-            display: inline-block;
-            border-radius: 20px;
-            padding: 4px 14px;
+            padding: 16px 10px;
+            color: #8b949e;
             font-size: 13px;
-            font-weight: bold;
         }
 
-        .pill-pr {
-            background: #2d2008;
-            color: #d29922;
-            border: 1px solid #5a3e0a;
+        /** NOTES **/
+
+        .note {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-left: 4px solid #8b949e;
+            border-radius: 6px;
+            padding: 16px 20px;
         }
 
-        .pill-release {
-            background: #0d2414;
-            color: #3fb950;
-            border: 1px solid #1a4d26;
-        }
+        /** STATS **/
 
-        .pill-closed {
-            background: #3d0c09;
-            color: #f85149;
-            border: 1px solid #6d1a16;
-        }
-
-        .pill-pipeline {
-            background: #1e0d33;
-            color: #bc8cff;
-            border: 1px solid #4a2080;
-        }
-
-        /* ── Repo summary table ── */
-        .repo-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #58a6ff;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .repo-name {
-            font-weight: bold;
-            color: #58a6ff;
-            vertical-align: middle;
-        }
-
-        /* ══════════════════════════════════════
-           RELEASE TIMELINE
-           ══════════════════════════════════════ */
-
-        .release-timeline {
-            padding: 0 0 0 20px;
-        }
-
-        .tl-table {
+        .stats-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 12px;
+            table-layout: fixed;
         }
 
-        .tl-rail-cell {
-            width: 16px;
-            padding: 0;
-            vertical-align: top;
-            border: none;
-            background: transparent;
-        }
-
-        .tl-rail-top {
-            width: 2px;
-            height: 12px;
-            background: #21262d;
-            margin: 0 auto;
-        }
-
-        .tl-rail-bottom {
-            width: 2px;
-            background: #21262d;
-            margin: 0 auto;
-            height: 100%;
-            min-height: 16px;
-        }
-
-        .tl-dot-cell {
-            width: 20px;
-            padding: 0;
+        .stat-card {
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            padding: 16px 20px;
             vertical-align: top;
             text-align: center;
-            border: none;
-            background: transparent;
         }
 
-        .tl-dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 2px solid #21262d;
-            background: #0d1117;
-            margin-top: 12px;
-        }
-
-        .tl-dot.dot-planned {
-            border-color: #3fb950;
-            background: #0d2414;
-        }
-
-        .tl-dot.dot-hotfix {
-            border-color: #f85149;
-            background: #3d0c09;
-        }
-
-        .tl-content-cell {
-            padding: 10px 20px 10px 14px;
-            border-bottom: 1px solid #21262d;
-            border-top: none;
-            border-left: none;
-            border-right: none;
-            background: transparent;
-            vertical-align: middle;
-        }
-
-        .tl-entry-last .tl-content-cell {
-            border-bottom: none;
-        }
-
-        .tl-entry-last .tl-rail-bottom {
-            background: transparent;
-        }
-
-        .tl-version {
-            font-family: monospace;
-            font-size: 14px;
-            font-weight: bold;
-            color: #e6edf3;
-        }
-
-        .tl-version-hotfix {
-            margin-left: 20px;
-        }
-
-        .tl-content-inner {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .tl-content-inner td {
-            padding: 0;
-            border: none;
-            background: transparent;
-            vertical-align: middle;
-        }
-
-        .tl-date {
+        .stat-label {
             font-size: 12px;
-            color: #8b949e;
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        /* ── Type badges ── */
-        .badge-planned {
-            display: inline-block;
-            background: #0d2414;
-            color: #3fb950;
-            border: 1px solid #1a4d26;
-            border-radius: 20px;
-            padding: 2px 10px;
-            font-size: 11px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .badge-hotfix {
-            display: inline-block;
-            background: #3d0c09;
-            color: #f85149;
-            border: 1px solid #6d1a16;
-            border-radius: 4px;
-            padding: 2px 10px;
-            font-size: 11px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        /* ── Pipeline table ── */
-        .pipeline-name {
-            font-weight: bold;
-            color: #e6edf3;
-        }
-
-        .rate-bar-table {
-            width: 150px;
-            border-collapse: collapse;
-        }
-
-        .rate-bar-table td {
-            padding: 0;
-            border: none;
-            background: transparent;
-            vertical-align: middle;
-        }
-
-        .rate-bar-bg {
-            background: #21262d;
-            border-radius: 4px;
-            height: 6px;
-            width: 100px;
-        }
-
-        .rate-bar-fill {
-            height: 6px;
-            border-radius: 4px;
-            background: #3fb950;
-        }
-
-        .rate-text-cell {
-            white-space: nowrap;
-            padding-left: 8px;
-            width: 44px;
-        }
-
-        .success-rate-text {
-            font-size: 12px;
-            color: #3fb950;
-            font-weight: bold;
-        }
-
-        .duration-text {
-            font-size: 12px;
-            color: #8b949e;
-        }
-
-        /* ── Contributor table ── */
-        .user-name {
-            font-weight: bold;
-            color: #58a6ff;
-        }
-
-        .badge-active {
-            display: inline-block;
-            background: #0d2414;
-            color: #3fb950;
-            border: 1px solid #1a4d26;
-            border-radius: 20px;
-            padding: 2px 10px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .badge-inactive {
-            display: inline-block;
-            background: #1c1c1c;
-            color: #8b949e;
-            border: 1px solid #30363d;
-            border-radius: 20px;
-            padding: 2px 10px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .date-text {
-            font-size: 12px;
-            color: #8b949e;
-        }
-
-        /* ══════════════════════════════════════
-           DEPLOYMENT PAGE
-           ══════════════════════════════════════ */
-
-        /* Change failure rate gauge — table-based */
-        .cfr-section {
-            padding: 24px 24px 4px 24px;
-        }
-
-        .cfr-label {
-            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #8b949e;
-            margin-bottom: 5px;
+            letter-spacing: 3px;
+            color: #8a8a9a;
+            margin-bottom: 4px;
         }
 
-        .cfr-bar-table {
+        .stat-value {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .bar-value-cell {
+            white-space: nowrap;
+            margin-left: 12px;
+            width: 40px;
+        }
+
+        .bar-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 6px;
         }
 
-        .cfr-bar-table td {
+        .bar-table td {
             padding: 0;
             border: none;
             background: transparent;
             vertical-align: middle;
         }
 
-        .cfr-bar-bg {
+        .bar-bg {
             height: 10px;
             border-radius: 5px;
             background: #21262d;
             width: 100%;
         }
 
-        /* Fill colour changes based on severity via inline style */
-        .cfr-bar-fill {
+        .bar-fill {
             height: 10px;
             border-radius: 5px;
         }
-
-        .cfr-value-cell {
-            white-space: nowrap;
-            padding-left: 12px;
-            width: 52px;
-        }
-
-        .cfr-value {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .cfr-legend {
-            font-size: 11px;
-            color: #8b949e;
-            padding-bottom: 0px;
-        }
-
-        /* DORA thresholds legend */
-        .dora-legend-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            border-top: 1px solid #21262d;
-        }
-
-        .dora-legend-table td {
-            padding: 12px 24px;
-            font-size: 12px;
-            color: #8b949e;
-            border: none;
-            background: transparent;
-            vertical-align: top;
-        }
-
-        .dora-legend-title {
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: #8b949e;
-            margin-bottom: 8px;
-        }
-
-        .dora-tier {
-            display: inline-block;
-            border-radius: 4px;
-            padding: 2px 8px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .dora-elite {
-            background: #0d2414;
-            color: #3fb950;
-            border: 1px solid #1a4d26;
-        }
-
-        .dora-high {
-            background: #1f2d3d;
-            color: #58a6ff;
-            border: 1px solid #1f6feb;
-        }
-
-        .dora-med {
-            background: #2d2008;
-            color: #d29922;
-            border: 1px solid #5a3e0a;
-        }
-
-        .dora-low {
-            background: #3d0c09;
-            color: #f85149;
-            border: 1px solid #6d1a16;
-        }
-
-        /* ── Empty state ── */
-        .empty-cell {
-            text-align: center;
-            padding: 32px 20px;
-            color: #8b949e;
-            font-size: 13px;
-        }
-
-        /* ── Deployment Frequency ───────────────────────────────── */
-        .df-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .df-label {
-            font-weight: 600;
-            margin-bottom: .5rem;
-            font-size: .9rem;
-        }
-
-        .df-bar-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .df-bar-table tr {
-            height: 28px;
-        }
-
-        .df-period-cell {
-            width: 6rem;
-            font-size: .8rem;
-            color: #8b949e;
-            white-space: nowrap;
-            padding: 4px 1.5rem 4px 0; /* top/bottom breathing room + right gap */
-        }
-
-        .df-bar-cell {
-            width: 100%;
-            padding: 4px 1.5rem 4px 0; /* matches period-cell right gap */
-        }
-
-        .df-value-cell {
-            white-space: nowrap;
-            padding: 4px 0 4px 0.75rem; /* left gap away from bar end */
-        }
-
-        .df-bar-bg {
-            background: #30363d;
-            border-radius: 4px;
-            margin-left: 15px;
-            margin-right: 15px;
-            height: 10px;
-            width: 95%;
-            overflow: hidden;
-        }
-
-        .df-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width .4s ease;
-        }
-
-        .df-value {
-            font-size: .85rem;
-            font-weight: 600;
-        }
-
-        .df-value.green {
-            color: #3fb950;
-        }
-
-        .df-value.blue {
-            color: #58a6ff;
-        }
-
-        .df-value.orange {
-            color: #d29922;
-        }
-
-        .df-value.red {
-            color: #f85149;
-        }
-
-        .df-legend {
-            font-size: .75rem;
-            color: #8b949e;
-            margin-top: .4rem;
-        }
-
-        /* ── Footer ── */
-        .report-footer-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 24px;
-        }
-
-        .report-footer-table td {
-            font-size: 12px;
-            color: #8b949e;
-            border: none;
-            background: transparent;
-            padding: 0;
-        }
-
-        .footer-right {
-            text-align: right;
-        }
     </style>
 </head>
-
 <body>
+<!-- 1. Summary (header + notice + global stats + repository global stats) -->
+<div th:replace="~{fragments/layout.html :: header}"/>
+<div th:replace="~{fragments/notes.html :: notice}"/>
+<div th:replace="~{fragments/overview.html :: stats}"/>
+<div th:replace="~{fragments/overview.html :: repositories}"/>
 
-<!-- ════════════════════════════════════════════
-     PAGE 1 — SUMMARY
-     ════════════════════════════════════════════ -->
-
-<div class="report-header">
-    <table class="report-header-table">
-        <tr>
-            <td style="vertical-align: top;">
-                <div class="report-title" th:text="${project.name()}">Project Name</div>
-                <div class="report-subtitle">Metrics</div>
-            </td>
-            <td class="report-meta">
-                <div>Generated on</div>
-                <div><span
-                        th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy HH:mm')}">14 Mar 2026 12:34</span>
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
-
-<div class="notice">
-    <div class="notice-title">A note on metrics</div>
-    <div class="notice-intro">The figures below are intended as signals, not scorecards.</div>
-    <table class="notice-laws-table">
-        <tr>
-            <td class="law-label">Goodhart's Law</td>
-            <td class="law-quote">"When a measure becomes a target, it ceases to be a good measure."</td>
-        </tr>
-        <tr>
-            <td class="law-label">Campbell's Law</td>
-            <td class="law-quote">High-stakes metrics tend to get gamed over time, corrupting the very process they were
-                meant to monitor.
-            </td>
-        </tr>
-    </table>
-    <div class="notice-footer">Use these numbers to spark conversations, not to draw final conclusions.</div>
-</div>
-
-<table class="stats-table"
-       th:with="
-           repos    = ${project.repositories()},
-           totalPRs = ${#aggregates.sum(project.repositories().![totalPRs])},
-           totalRel = ${#aggregates.sum(project.repositories().![totalReleases])},
-           totalPip = ${#aggregates.sum(project.repositories().![totalPipelines])}">
-    <tr>
-        <td class="stat-card">
-            <div class="stat-label">Repositories</div>
-            <div class="stat-value blue" th:text="${repos.size()}">0</div>
-        </td>
-        <td class="stat-card">
-            <div class="stat-label">Pull Requests</div>
-            <div class="stat-value orange" th:text="${totalPRs}">0</div>
-        </td>
-        <td class="stat-card">
-            <div class="stat-label">Releases</div>
-            <div class="stat-value green" th:text="${totalRel}">0</div>
-        </td>
-        <td class="stat-card">
-            <div class="stat-label">Pipelines</div>
-            <div class="stat-value purple" th:text="${totalPip}">0</div>
-        </td>
-    </tr>
-</table>
-
-<div class="table-wrapper">
-    <table class="table-toolbar">
-        <tr>
-            <td><span class="toolbar-title">Repositories</span></td>
-            <td class="toolbar-right">
-                <span class="count-badge"
-                      th:text="${project.repositories().size() + ' repos'}">0 repos</span>
-            </td>
-        </tr>
-    </table>
-    <table class="data-table">
-        <thead>
-        <tr>
-            <th>Repository</th>
-            <th class="center">Pull Requests</th>
-            <th class="center">Releases</th>
-            <th class="center">Pipelines</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="repo : ${project.repositories()}">
-            <td>
-                <span class="repo-dot"></span>
-                <span class="repo-name" th:text="${repo.name()}">repository-name</span>
-            </td>
-            <td class="center">
-                <span class="pill pill-pr"
-                      th:text="${repo.totalPRs() != null ? repo.totalPRs() : 0}">0</span>
-            </td>
-            <td class="center">
-                <span class="pill pill-release"
-                      th:text="${repo.totalReleases() != null ? repo.totalReleases() : 0}">0</span>
-            </td>
-            <td class="center">
-                <span class="pill pill-pipeline"
-                      th:text="${repo.totalPipelines() != null ? repo.totalPipelines() : 0}">0</span>
-            </td>
-        </tr>
-        <tr th:if="${project.repositories() == null or project.repositories().isEmpty()}">
-            <td class="empty-cell" colspan="4">No repositories found for this project.</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<!-- ════════════════════════════════════════════
-     ONE PAGE PER REPOSITORY
-     ════════════════════════════════════════════ -->
-
+<!-- 2. Overview page for each Repository (releases, pipelines, pull requests) -->
 <div class="page-break" th:each="repo : ${project.repositories()}">
-
-    <div class="repo-page-header">
-        <div class="repo-page-title" th:text="${repo.name()}">repository-name</div>
-    </div>
-
-    <div class="table-wrapper">
-        <table class="table-toolbar">
-            <tr>
-                <td><span class="toolbar-title">Releases</span></td>
-                <td class="toolbar-right">
-                    <span class="count-badge"
-                          th:text="${(repo.releases() != null ? repo.releases().size() : 0) + ' releases'}">0 releases</span>
-                </td>
-            </tr>
-        </table>
-
-        <div class="release-timeline" th:if="${repo.releases() != null and !repo.releases().isEmpty()}">
-            <div th:class="${iter.last ? 'tl-entry-last' : ''}"
-                 th:each="release,iter : ${repo.releases()}">
-                <table class="tl-table">
-                    <tr>
-                        <td class="tl-rail-cell" style="width:16px;">
-                            <div class="tl-rail-top"></div>
-                            <div class="tl-rail-bottom"></div>
-                        </td>
-                        <td class="tl-dot-cell" style="width:20px; vertical-align:top; text-align:center;">
-                            <span th:class="${release.isPlanned() ? 'tl-dot dot-planned' : 'tl-dot dot-hotfix'}"></span>
-                        </td>
-                        <td class="tl-content-cell">
-                            <table class="tl-content-inner">
-                                <tr>
-                                    <td>
-                                        <span class="tl-version" th:if="${release.isPlanned()}"
-                                              th:text="${release.version()}">vx.y.0</span>
-                                        <span class="tl-version tl-version-hotfix" th:unless="${release.isPlanned()}"
-                                              th:text="${release.version()}">vx.y.z</span>
-                                    </td>
-                                    <td style="text-align:right; white-space:nowrap;">
-                                        <span class="badge-planned" th:if="${release.isPlanned()}">Planned</span>
-                                        <span class="badge-hotfix" th:unless="${release.isPlanned()}">Hotfix</span>
-                                        &nbsp;&nbsp;
-                                        <span class="tl-date"
-                                              th:text="${release.publishedAtFormatted() != null ? release.publishedAtFormatted() : '-'}">-</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="empty-cell" th:if="${repo.releases() == null or repo.releases().isEmpty()}">
-            No releases found.
-        </div>
-    </div>
-
-    <div class="table-wrapper section-gap">
-        <table class="table-toolbar">
-            <tr>
-                <td><span class="toolbar-title">Workflows</span></td>
-                <td class="toolbar-right">
-                    <span class="count-badge"
-                          th:text="${(repo.pipelines() != null ? repo.pipelines().size() : 0) + ' workflows'}">0 workflows</span>
-                </td>
-            </tr>
-        </table>
-        <table class="data-table">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th class="center">Total Runs</th>
-                <th>Success Rate</th>
-                <th class="right">Avg. Duration</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="pipeline : ${repo.pipelines()}">
-                <td>
-                    <span class="pipeline-name" th:text="${pipeline.name()}">workflow-name</span>
-                </td>
-                <td class="center">
-                    <span class="pill pill-pipeline"
-                          th:text="${pipeline.totalRuns() != null ? pipeline.totalRuns() : 0}">0</span>
-                </td>
-                <td>
-                    <table class="rate-bar-table"
-                           th:with="rate=${pipeline.successRate() != null ? pipeline.successRate() : 0}">
-                        <tr>
-                            <td>
-                                <div class="rate-bar-bg">
-                                    <div class="rate-bar-fill"
-                                         th:style="'width: ' + ${rate * 100} + '%;'"></div>
-                                </div>
-                            </td>
-                            <td class="rate-text-cell">
-                                <span class="success-rate-text"
-                                      th:text="${#numbers.formatDecimal(rate * 100, 1, 1) + '%'}">0.0%</span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td class="right">
-                    <span class="duration-text"
-                          th:text="${pipeline.averageDurationFormatted()}">-</span>
-                </td>
-            </tr>
-            <tr th:if="${repo.pipelines() == null or repo.pipelines().isEmpty()}">
-                <td class="empty-cell" colspan="4">No workflows found.</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="table-wrapper section-gap">
-        <table class="table-toolbar">
-            <tr>
-                <td><span class="toolbar-title">Pull Requests</span></td>
-                <td class="toolbar-right">
-                    <span class="count-badge"
-                          th:text="${(repo.pullRequests() != null ? repo.pullRequests().totalPullRequests() : 0) + ' prs'}">0 PRs</span>
-                </td>
-            </tr>
-        </table>
-
-        <table class="data-table">
-            <thead>
-            <tr>
-                <th>Opened</th>
-                <th>Merged</th>
-                <th>Closed</th>
-                <th>Review Turn Around Time</th>
-                <th>Cycle Time</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <span class="pill pill-release" th:text="${repo.pullRequests().totalOpenedPullRequests()}">0</span>
-                </td>
-                <td>
-                    <span class="pill pill-pr" th:text="${repo.pullRequests().totalMergedPullRequests()}">0</span>
-                </td>
-                <td>
-                    <span class="pill pill-closed" th:text="${repo.pullRequests().totalClosedPullRequests()}">0</span>
-                </td>
-                <td>
-                    <span class="duration-text"
-                          th:text="${repo.pullRequests().reviewTurnAroundTimeFormatted()}">0</span>
-                </td>
-                <td>
-                    <span class="duration-text" th:text="${repo.pullRequests().cycleTimeFormatted()}">0</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="empty-cell" th:if="${repo.pullRequests().totalPullRequests() == 0}">
-            No Pull Requests found.
-        </div>
-    </div>
-
+    <div th:replace="~{fragments/repository.html :: repository}"/>
 </div>
 
-<!-- ════════════════════════════════════════════
-     CONTRIBUTORS PAGE
-     ════════════════════════════════════════════ -->
+<!-- 3. Contributions -->
+<div th:replace="~{fragments/contributions.html :: contributions}"/>
 
-<div class="page-break">
-
-    <div class="repo-page-header">
-        <div class="repo-page-title">Contributions</div>
-    </div>
-
-    <table class="stats-table">
-        <tr>
-            <td class="stat-card">
-                <div class="stat-label">Time to 10th PR</div>
-                <div class="stat-value blue"
-                     th:text="${project.contributions().averageTimeTo10thPRFormatted()}">0
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="table-wrapper">
-        <table class="table-toolbar">
-            <tr>
-                <td><span class="toolbar-title">Contributors</span></td>
-                <td class="toolbar-right">
-                    <span class="count-badge"
-                          th:text="${project.contributions().contributors().size() + ' members'}">0 members</span>
-                </td>
-            </tr>
-        </table>
-        <table class="data-table">
-            <thead>
-            <tr>
-                <th>User</th>
-                <th class="center">Status</th>
-                <th class="center">Pull Requests</th>
-                <th class="center">Reviews</th>
-                <th>First PR</th>
-                <th>Last PR</th>
-                <th>Time to 10th PR</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="contributor : ${project.contributions().contributors()}">
-                <td><span class="user-name" th:text="${contributor.user()}">username</span></td>
-                <td class="center">
-                    <span class="badge-active" th:if="${contributor.active()}">Active</span>
-                    <span class="badge-inactive" th:unless="${contributor.active()}">Inactive</span>
-                </td>
-                <td class="center">
-                    <span class="pill pill-pr"
-                          th:text="${contributor.totalPullRequests()}">0</span>
-                </td>
-                <td class="center">
-                    <span class="pill pill-pipeline"
-                          th:text="${contributor.totalReviews() }">0</span>
-                </td>
-                <td><span class="date-text"
-                          th:text="${contributor.firstPrDateFormatted()}">-</span>
-                </td>
-                <td><span class="date-text"
-                          th:text="${contributor.lastPrDateFormatted()}">-</span>
-                </td>
-                <td><span class="date-text"
-                          th:text="${contributor.timeTo10thPrDateFormatted()}">-</span>
-                </td>
-            </tr>
-            <tr th:if="${project.contributions().contributors() == null or project.contributions().contributors().isEmpty()}">
-                <td class="empty-cell" colspan="7">No contributors found for this project.</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- ════════════════════════════════════════════
-     DEPLOYMENTS PAGE
-     ════════════════════════════════════════════ -->
-
-<div class="page-break" th:if="${project.deployments() != null}"
-     th:with="d=${project.deployments()}">
-
-    <div class="repo-page-header">
-        <div class="repo-page-title">Deployments</div>
-    </div>
-
-    <!--
-      4 stat cards: Total Deployments / Total Planned / Total Hotfixes / Hotfix Rate
-    -->
-    <table class="stats-table">
-        <tr>
-            <td class="stat-card">
-                <div class="stat-label">Total</div>
-                <div class="stat-value blue"
-                     th:text="${d.totalDeployments()}">0
-                </div>
-            </td>
-            <td class="stat-card">
-                <div class="stat-label">Planned</div>
-                <div class="stat-value green"
-                     th:text="${d.totalPlanned()}">0
-                </div>
-            </td>
-            <td class="stat-card">
-                <div class="stat-label">Hotfixes</div>
-                <div class="stat-value orange"
-                     th:text="${d.totalHotfixes()}">0
-                </div>
-            </td>
-            <td class="stat-card">
-                <div class="stat-label">Hotfix Ratio</div>
-                <!--
-                  Colour logic:
-                    < 5%   → elite  → green
-                    < 15%  → high   → blue
-                    < 30%  → medium → orange
-                    >= 30% → low    → red
-                -->
-                <div th:with="cfr=${d.hotfixRatio() != null ? d.hotfixRatio() * 100 : 0}">
-                    <div class="stat-value green" th:if="${cfr lt 5}"
-                         th:text="${#numbers.formatDecimal(cfr, 1, 1) + '%'}">0.0%
-                    </div>
-                    <div class="stat-value blue" th:if="${cfr >= 5  and cfr lt 15}"
-                         th:text="${#numbers.formatDecimal(cfr, 1, 1) + '%'}">0.0%
-                    </div>
-                    <div class="stat-value orange" th:if="${cfr >= 15 and cfr lt 30}"
-                         th:text="${#numbers.formatDecimal(cfr, 1, 1) + '%'}">0.0%
-                    </div>
-                    <div class="stat-value red" th:if="${cfr >= 30}"
-                         th:text="${#numbers.formatDecimal(cfr, 1, 1) + '%'}">0.0%
-                    </div>
-                </div>
-            </td>
-            <td class="stat-card">
-                <div class="stat-label">Frequency</div>
-                <div class="stat-value blue"
-                     th:text="${d.deploymentsPerPeriod() + ' / Quarter'}">0
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <!-- Change Failure Rate gauge bar -->
-    <div class="table-wrapper"
-         th:with="cfr=${d.hotfixRatio() != null ? d.hotfixRatio() * 100 : 0}">
-        <table class="table-toolbar">
-            <tr>
-                <td><span class="toolbar-title">Change Failure Rate</span></td>
-                <td class="toolbar-right">
-                    <!--
-                      Badge label follows DORA tiers:
-                        < 5%   Elite
-                        < 15%  High
-                        < 30%  Medium
-                        >= 30% Low
-                    -->
-                    <span class="dora-tier dora-elite" th:if="${cfr lt 5}">Elite</span>
-                    <span class="dora-tier dora-high" th:if="${cfr >= 5  and cfr lt 15}">High</span>
-                    <span class="dora-tier dora-med" th:if="${cfr >= 15 and cfr lt 30}">Medium</span>
-                    <span class="dora-tier dora-low" th:if="${cfr >= 30}">Low</span>
-                </td>
-            </tr>
-        </table>
-
-        <div class="cfr-section">
-            <div class="cfr-label">Failure rate across all deployments</div>
-            <table class="cfr-bar-table">
-                <tr>
-                    <td>
-                        <div class="cfr-bar-bg">
-                            <!-- Bar fill colour matches DORA tier -->
-                            <div class="cfr-bar-fill"
-                                 th:style="${cfr lt 5  ? 'width: ' + cfr + '%; background: #3fb950;' :
-                                            cfr lt 15  ? 'width: ' + cfr + '%; background: #58a6ff;' :
-                                            cfr lt 30  ? 'width: ' + cfr + '%; background: #d29922;' :
-                                                         'width: ' + cfr + '%; background: #f85149;'}">
-                            </div>
-                        </div>
-                    </td>
-                    <td class="cfr-value-cell">
-                        <span class="cfr-value"
-                              th:class="${cfr lt 5   ? 'cfr-value green'  :
-                                          cfr lt 15  ? 'cfr-value blue'   :
-                                          cfr lt 30  ? 'cfr-value orange' : 'cfr-value red'}"
-                              th:text="${#numbers.formatDecimal(cfr, 1, 1) + '%'}">0.0%</span>
-                    </td>
-                </tr>
-            </table>
-            <div class="cfr-legend">
-                Lower is better. Industry benchmark: below 15% is considered healthy (DORA).
-            </div>
-        </div>
-
-        <!-- DORA tiers legend -->
-        <table class="dora-legend-table">
-            <tr>
-                <td>
-                    <div class="dora-legend-title">DORA Performance Tiers</div>
-                    <table style="border-collapse: collapse;">
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-elite">Elite</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                CFR below 5%
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-high">High</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                CFR 5% to 14%
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-med">Medium</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                CFR 15% to 29%
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-low">Low</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                CFR 30% or above
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- ════════════════════════════════════
-         DEPLOYMENT FREQUENCY — enhanced
-         ════════════════════════════════════ -->
-    <div class="table-wrapper section-gap">
-        <table class="table-toolbar">
-            <tr>
-                <td><span class="toolbar-title">Deployment frequency</span></td>
-            </tr>
-        </table>
-
-        <div style="padding-left: 20px; padding-right: 20px; padding-top: 10px;">
-            <table class="df-bar-table">
-                <tr th:each="freq : ${project.deployments().frequencies()}">
-                    <td class="df-period-cell">
-                        <span th:text="${freq.period()}">period</span>
-                    </td>
-                    <td class="df-bar-cell">
-                        <div class="df-bar-bg">
-                            <div class="df-bar-fill"
-                                 th:with="maxCount=${project.deployments().maxDeploymentsPerPeriod()},
-                                      pct=${freq.count() * 100 / maxCount}"
-                                 th:style="${freq.count() ge 90 ? 'width: ' + pct + '%; background: #3fb950;' :
-                                         freq.count() ge 12 ? 'width: ' + pct + '%; background: #58a6ff;' :
-                                         freq.count() ge 4  ? 'width: ' + pct + '%; background: #d29922;' :
-                                                              'width: ' + pct + '%; background: #f85149;'}">
-                            </div>
-                        </div>
-                    </td>
-                    <td class="df-value-cell">
-                        <span th:class="${freq.count() ge 90 ? 'df-value green'  :
-                                      freq.count() ge 12 ? 'df-value blue'   :
-                                      freq.count() ge 4  ? 'df-value orange' : 'df-value red'}"
-                          th:text="${freq.count()}">0</span>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- ── DORA tiers legend ── -->
-        <table class="dora-legend-table">
-            <tr>
-                <td>
-                    <div class="dora-legend-title">DORA Deployment Frequency Tiers</div>
-                    <table style="border-collapse: collapse;">
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-elite">Elite</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                On demand — multiple deployments per day
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-high">High</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                Once per day to once per week
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-med">Medium</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                Once per week to once per month
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 3px 12px 3px 0; border: none; background: transparent; vertical-align: middle;">
-                                <span class="dora-tier dora-low">Low</span>
-                            </td>
-                            <td style="padding: 3px 0; border: none; background: transparent; font-size: 12px; color: #8b949e;">
-                                Once per month or less
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-</div>
-<!-- end deployments page -->
-
-<!-- Footer -->
-<table class="report-footer-table">
-    <tr>
-        <td th:text="${project.name() + ' - Repository Report'}">Project Report</td>
-        <td class="footer-right"
-            th:text="${'Generated: ' + #temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm')}">Generated:
-            2026-03-14
-        </td>
-    </tr>
-</table>
-
+<!-- 4. Deployments -->
+<div th:replace="~{fragments/deployments.html :: deployments}"/>
 </body>
 </html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="repository">
+    <div class="title blue bottom-line" th:text="${repo.name()}">repository-name</div>
+    <div th:replace="~{::releases}"/>
+    <div th:replace="~{::pipelines}"/>
+    <div th:replace="~{::pull-requests}"/>
+</div>
+
+<div class="table-container section" th:fragment="releases">
+
+    <table class="table-header">
+        <tr>
+            <td><span class="table-header-title">Releases</span></td>
+            <td class="right">
+                <span class="badge"
+                      th:text="${repo.releases().size() + ' releases'}">0 repos</span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table">
+        <tbody>
+        <tr th:each="release : ${repo.releases()}">
+            <td>
+                <span class="ml-xs" th:if="${release.isPlanned()}"/>
+                <span class="ml-m" th:unless="${release.isPlanned()}"/>
+                <span class="code mr-s" th:text="${release.version()}">vx.y.z</span>
+                <span class="pill pill-green" th:if="${release.isPlanned()}">Planned</span>
+                <span class="pill pill-red" th:unless="${release.isPlanned()}">Hotfix</span>
+            </td>
+            <td class="right">
+                <span class="subtext" th:text="${release.publishedAtFormatted()}">13 Mar 2026 13:12</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="no-data" th:if="${repo.releases() == null or repo.releases().isEmpty()}">
+        No releases found.
+    </div>
+</div>
+
+<div class="table-container section" th:fragment="pull-requests">
+    <table class="table-header">
+        <tr>
+            <td><span class="table-header-title">Pull Requests</span></td>
+            <td class="right">
+                <span class="badge"
+                      th:text="${repo.pullRequests().totalPullRequests() + ' PRs'}">0 PRs</span>
+            </td>
+        </tr>
+    </table>
+    <table class="table-data" th:if="${repo.pullRequests().totalPullRequests() > 0}">
+        <thead>
+        <tr>
+            <th class="center">Opened</th>
+            <th class="center">Merged</th>
+            <th class="center">Closed</th>
+            <th class="center">Review Time</th>
+            <th class="center">Cycle Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="center">
+                    <span class="pill pill-green"
+                          th:text="${repo.pullRequests().totalOpenedPullRequests()}">0</span>
+            </td>
+            <td class="center">
+                    <span class="pill pill-purple"
+                          th:text="${repo.pullRequests().totalMergedPullRequests()}">0</span>
+            </td>
+            <td class="center">
+                    <span class="pill pill-red"
+                          th:text="${repo.pullRequests().totalClosedPullRequests()}">0</span>
+            </td>
+            <td class="center">
+                <span class="subtext" th:text="${repo.pullRequests().reviewTurnAroundTimeFormatted()}">0s</span>
+            </td>
+            <td class="center">
+                <span class="subtext" th:text="${repo.pullRequests().cycleTimeFormatted()}">0s</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="no-data" th:if="${repo.pullRequests().totalPullRequests() == 0}">
+        No Pull Requests found.
+    </div>
+</div>
+
+<div class="table-container section" th:fragment="pipelines">
+    <table class="table-header">
+        <tr>
+            <td><span class="table-header-title">Pipelines</span></td>
+            <td class="right">
+                <span class="badge"
+                      th:text="${repo.pipelines().size() + ' pipelines'}">0 pipelines</span>
+            </td>
+        </tr>
+    </table>
+    <table class="table-data">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th class="center">Runs</th>
+            <th class="center">Success Rate</th>
+            <th class="center">Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pipeline : ${repo.pipelines()}">
+            <td>
+                <span th:text="${pipeline.name()}">pipeline-name</span>
+            </td>
+            <td class="center">
+                <span class="pill pill-blue" th:text="${pipeline.totalRuns()}">0</span>
+            </td>
+            <td class="center">
+                <span class="subtext"
+                      th:text="${#numbers.formatDecimal(pipeline.successRate() * 100, 1, 1) + '%'}">0%</span>
+            </td>
+            <td class="center">
+                <span class="subtext" th:text="${pipeline.averageDurationFormatted()}">0s</span>
+            </td>
+        </tr>
+        <tr th:if="${repo.pipelines() == null or repo.pipelines().isEmpty()}">
+            <td colspan="4">No pipelines found for this project.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
