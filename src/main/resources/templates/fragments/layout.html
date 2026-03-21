@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="section" th:fragment="header">
+    <div class="header" th:text="${project.name()}">Project Name</div>
+    <div class="subtitle">
+        Generated on
+        <span class="blue"
+              th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy HH:mm')}">
+            4 Mar 2026 12:34
+        </span>
+    </div>
+</div>
+</body>
+</html>
+

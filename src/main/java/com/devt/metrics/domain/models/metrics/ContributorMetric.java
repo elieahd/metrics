@@ -6,8 +6,8 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 
 public record ContributorMetric(String user,
-                                int totalPullRequests,
-                                int totalReviews,
+                                long totalPullRequests,
+                                long totalReviews,
                                 OffsetDateTime firstPrDate,
                                 OffsetDateTime lastPrDate,
                                 boolean active,
@@ -22,7 +22,7 @@ public record ContributorMetric(String user,
     }
 
     public String timeTo10thPrDateFormatted() {
-        return Formatter.format(timeTo10thPr);
+        return Formatter.formatInDaysAndHours(timeTo10thPr);
     }
 
 }

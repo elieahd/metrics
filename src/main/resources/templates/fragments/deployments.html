@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="page-break" th:fragment="deployments">
+    <div class="title blue bottom-line">Deployments</div>
+    <table class="stats-table section">
+        <tr>
+            <td class="stat-card">
+                <div class="stat-label">Total</div>
+                <div class="stat-value blue" th:text="${project.deployments().totalDeployments()}">0</div>
+            </td>
+            <td class="stat-card">
+                <div class="stat-label">Planned</div>
+                <div class="stat-value green" th:text="${project.deployments().totalPlanned()}">0</div>
+            </td>
+            <td class="stat-card">
+                <div class="stat-label">Hotfixes</div>
+                <div class="stat-value orange" th:text="${project.deployments().totalHotfixes()}">0</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="table-container section" th:with="cfr=${project.deployments().cfrMetric()}">
+        <table class="table-header">
+            <tr>
+                <td><span class="table-header-title">Change Failure Rate</span></td>
+                <td class="right">
+                    <span class="pill pill-purple" th:if="${cfr.isElite()}">Elite</span>
+                    <span class="pill pill-green" th:if="${cfr.isHigh()}">High</span>
+                    <span class="pill pill-orange" th:if="${cfr.isMedium()}">Medium</span>
+                    <span class="pill pill-red" th:if="${cfr.isLow()}">Low</span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="ml-s mt-s">
+            <span class="legend">Failure rate across all deployments</span>
+            <table class="bar-table mt-s">
+                <tr>
+                    <td>
+                        <div class="bar-bg">
+                            <div class="bar-fill"
+                                 th:style="${'width: ' + cfr.value() * 100 + '%; background: ' +
+        (cfr.isElite() ? 'purple' :
+        cfr.isHigh() ? 'green' :
+        cfr.isMedium() ? 'orange' : '#f85149')
+       + ';'}">
+                            </div>
+                        </div>
+                    </td>
+                    <td class="bar-value-cell">
+                        <span th:class="${cfr.isElite() ? 'purple' :
+                                          cfr.isHigh() ? 'green' :
+                                          cfr.isMedium() ? 'orange' : 'red'}"
+                              th:text="${#numbers.formatDecimal(cfr.value() * 100, 1, 1) + '%'}">0.0%</span>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <table class="ml-s mt-s">
+            <tr>
+                <td><span class="pill pill-purple">Elite</span></td>
+                <td><span class="legend">CFR below 5%</span></td>
+            </tr>
+            <tr>
+                <td><span class="pill pill-green">High</span></td>
+                <td><span class="legend">CFR 5% to 14%</span></td>
+            </tr>
+            <tr>
+                <td><span class="pill pill-orange">Medium</span></td>
+                <td><span class="legend ">CFR between 15% to 29%</span></td>
+            </tr>
+            <tr>
+                <td><span class="pill pill-red">Low</span></td>
+                <td><span class="legend">CFR above 30%</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="table-container section" th:with="frequencyMetric=${project.deployments().frequencyMetric()}">
+        <table class="table-header">
+            <tr>
+                <td><span class="table-header-title">Frequencies</span></td>
+                <td class="right">
+
+                    <span class="pill pill-purple" th:if="${frequencyMetric.isElite()}">Elite</span>
+                    <span class="pill pill-green" th:if="${frequencyMetric.isHigh()}">High</span>
+                    <span class="pill pill-orange" th:if="${frequencyMetric.isMedium()}">Medium</span>
+                    <span class="pill pill-red" th:if="${frequencyMetric.isLow()}">Low</span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="ml-s mt-s">
+            <table class="stats-table">
+                <tr>
+                    <td class="stat-card" th:each="frequency : ${frequencyMetric.frequencies()}">
+                        <div class="stat-label" th:text="${frequency.period()}"/>
+                        <div class="stat-value blue" th:text="${frequency.count()}"/>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="center">
+                <span class="legend" th:text="${frequencyMetric.average() + ' deployments per Quarter'}"/>
+            </div>
+
+            <table class="ml-s mt-s">
+                <tr>
+                    <td><span class="pill pill-purple">Elite</span></td>
+                    <td><span class="legend">On demand (multiple deploys per day)</span></td>
+                </tr>
+                <tr>
+                    <td><span class="pill pill-green">High</span></td>
+                    <td><span class="legend">Between once per day and once per week</span></td>
+                </tr>
+                <tr>
+                    <td><span class="pill pill-orange">Medium</span></td>
+                    <td><span class="legend ">Between once per week and once per month</span></td>
+                </tr>
+                <tr>
+                    <td><span class="pill pill-red">Low</span></td>
+                    <td><span class="legend">Between once per month and once every six months, or fewer than once every six months</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

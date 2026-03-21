@@ -44,4 +44,15 @@ public class Formatter {
         return "%ds".formatted(seconds);
     }
 
+    public static String formatInDaysAndHours(Duration input) {
+        if (input == null) {
+            return "";
+        }
+
+        long days = input.toDaysPart();
+        long hours = input.toHoursPart();
+
+        return "%dd %dh".formatted(days, hours);
+    }
+
 }

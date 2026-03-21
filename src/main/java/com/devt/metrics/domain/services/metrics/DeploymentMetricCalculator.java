@@ -1,6 +1,7 @@
 package com.devt.metrics.domain.services.metrics;
 
-import com.devt.metrics.domain.models.metrics.DeploymentFrequency;
+import com.devt.metrics.domain.models.metrics.CFRMetric;
+import com.devt.metrics.domain.models.metrics.DeploymentFrequencyMetric;
 import com.devt.metrics.domain.models.metrics.DeploymentMetric;
 import com.devt.metrics.domain.models.metrics.ReleaseMetric;
 import com.devt.metrics.domain.models.metrics.RepositoryMetric;
@@ -8,10 +9,16 @@ import com.devt.metrics.domain.models.metrics.RepositoryMetric;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DeploymentMetricCalculator implements MetricCalculator<List<RepositoryMetric>, DeploymentMetric> {
+
+    private final MetricCalculator<Double, CFRMetric> cfrCalculator;
+    private final MetricCalculator<List<OffsetDateTime>, DeploymentFrequencyMetric> frequencyCalculator;
+
+    public DeploymentMetricCalculator() {
+        this.cfrCalculator = new CFRMetricCalculator();
+        this.frequencyCalculator = new FrequencyMetricCalculator();
+    }
 
     @Override
     public DeploymentMetric apply(List<RepositoryMetric> repositories) {
@@ -34,57 +41,23 @@ public class DeploymentMetricCalculator implements MetricCalculator<List<Reposit
             }
         }
 
-        var hotfixRatio = deployments > 0
+        double hotfixRatio = deployments > 0
                 ? (double) hotfixes / deployments
                 : 0.0;
 
-        List<DeploymentFrequency> frequencies = frequencies(deploymentsDates);
+        CFRMetric cfrMetric = cfrCalculator.apply(hotfixRatio);
 
-        double deploymentsPerQuarter = frequencies.isEmpty()
-                ? 0.0
-                : (double) deployments / frequencies.size();
+        DeploymentFrequencyMetric frequencyMetric = frequencyCalculator.apply(deploymentsDates);
 
         return new DeploymentMetric(
                 planned,
                 hotfixes,
                 deployments,
                 hotfixRatio,
-                frequencies,
-                deploymentsPerQuarter
+                cfrMetric,
+                frequencyMetric
         );
     }
 
-    private List<DeploymentFrequency> frequencies(List<OffsetDateTime> deploymentsDates) {
-        if (deploymentsDates.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        Map<String, Long> countsMap = deploymentsDates.stream()
-                .collect(Collectors.groupingBy(
-                        this::period,
-                        Collectors.counting()
-                ));
-
-        OffsetDateTime start = deploymentsDates.stream()
-                .min(OffsetDateTime::compareTo)
-                .get();
-
-        OffsetDateTime now = OffsetDateTime.now();
-
-        List<DeploymentFrequency> frequencies = new ArrayList<>();
-        OffsetDateTime current = start;
-        while (!current.isAfter(now)) {
-            String periodKey = period(current);
-            int count = countsMap.getOrDefault(periodKey, 0L).intValue();
-            frequencies.add(new DeploymentFrequency(periodKey, count));
-            current = current.plusMonths(3);
-        }
-        return frequencies;
-    }
-
-    private String period(OffsetDateTime date) {
-        int quarter = (date.getMonthValue() - 1) / 3 + 1;
-        return "Q" + quarter + " " + date.getYear();
-    }
 
 }

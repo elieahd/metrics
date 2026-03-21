@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="page-break" th:fragment="contributions">
+    <div class="title blue bottom-line">Contributions</div>
+    <table class="stats-table section">
+        <tr>
+            <td class="stat-card">
+                <div class="stat-label">Contributors</div>
+                <div class="stat-value blue" th:text="${project.contributions().totalContributors()}">0</div>
+            </td>
+            <td class="stat-card">
+                <div class="stat-label">Active Contributors</div>
+                <div class="stat-value green" th:text="${project.contributions().totalActiveContributors()}">0</div>
+            </td>
+            <td class="stat-card">
+                <div class="stat-label">Time to 10th PR</div>
+                <div class="stat-value blue" th:text="${project.contributions().averageTimeTo10thPRFormatted()}">0</div>
+            </td>
+        </tr>
+    </table>
+    <div class="table-container">
+        <table class="table-header">
+            <tr>
+                <td><span class="table-header-title">Contributors</span></td>
+                <td class="right">
+                <span class="badge"
+                      th:text="${project.contributions().contributors().size() + ' contributors'}">0 contributors</span>
+                </td>
+            </tr>
+        </table>
+        <table class="table-data" th:if="${project.contributions().contributors().size() > 0}">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th class="center">Status</th>
+                <th class="center">Pull Requests</th>
+                <th class="center">Reviews</th>
+                <th class="center">First PR</th>
+                <th class="center">Last PR</th>
+                <th class="center">Time to 10th PR</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="contributor : ${project.contributions().contributors()}">
+                <td>
+                    <span th:text="${contributor.user()}">username</span>
+                </td>
+                <td class="center">
+                    <span class="pill pill-green" th:if="${contributor.active()}">Active</span>
+                    <span class="pill pill-gray" th:unless="${contributor.active()}">Inactive</span>
+                </td>
+                <td class="center">
+                    <span class="pill pill-orange"
+                          th:text="${contributor.totalPullRequests()}">0</span>
+                </td>
+                <td class="center">
+                    <span class="pill pill-purple"
+                          th:text="${contributor.totalReviews() }">0</span>
+                </td>
+                <td class="center">
+                    <span class="subtext"
+                          th:text="${contributor.firstPrDateFormatted()}">-</span>
+                </td>
+                <td class="center">
+                    <span class="subtext"
+                          th:text="${contributor.lastPrDateFormatted()}">-</span>
+                </td>
+                <td class="center">
+                    <span class="subtext"
+                          th:text="${contributor.timeTo10thPrDateFormatted()}">-</span>
+                </td>
+            </tr>
+            <tr th:if="${project.contributions().contributors().size() == 0}">
+                <td class="center" colspan="7">No contributors found</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</div>
+</body>
+</html>
