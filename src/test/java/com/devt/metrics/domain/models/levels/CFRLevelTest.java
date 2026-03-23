@@ -12,25 +12,26 @@ class CFRLevelTest {
 
     static Stream<Arguments> cfrLevelProvider() {
         return Stream.of(
-                // ELITE (cfr <= 5)
-                Arguments.of(0.0, CFRLevel.ELITE),
-                Arguments.of(1.0, CFRLevel.ELITE),
-                Arguments.of(5.0, CFRLevel.ELITE),
+                // ELITE: cfr <= 0.05
+                Arguments.of(0.0,    CFRLevel.ELITE),   // zero / lower bound
+                Arguments.of(0.01,   CFRLevel.ELITE),   // well inside
+                Arguments.of(0.05,   CFRLevel.ELITE),   // exact upper boundary
 
-                // HIGH (5 < cfr <= 15)
-                Arguments.of(5.1, CFRLevel.HIGH),
-                Arguments.of(10.0, CFRLevel.HIGH),
-                Arguments.of(15.0, CFRLevel.HIGH),
+                // HIGH: 0.05 < cfr <= 0.15
+                Arguments.of(0.051,  CFRLevel.HIGH),    // just above ELITE boundary
+                Arguments.of(0.10,   CFRLevel.HIGH),    // midpoint
+                Arguments.of(0.15,   CFRLevel.HIGH),    // exact upper boundary
 
-                // MEDIUM (15 < cfr <= 30)
-                Arguments.of(15.1, CFRLevel.MEDIUM),
-                Arguments.of(20.0, CFRLevel.MEDIUM),
-                Arguments.of(30.0, CFRLevel.MEDIUM),
+                // MEDIUM: 0.15 < cfr <= 0.30
+                Arguments.of(0.151,  CFRLevel.MEDIUM),  // just above HIGH boundary
+                Arguments.of(0.20,   CFRLevel.MEDIUM),  // midpoint
+                Arguments.of(0.30,   CFRLevel.MEDIUM),  // exact upper boundary
 
-                // LOW (cfr > 30)
-                Arguments.of(30.1, CFRLevel.LOW),
-                Arguments.of(50.0, CFRLevel.LOW),
-                Arguments.of(100.0, CFRLevel.LOW)
+                // LOW: cfr > 0.30
+                Arguments.of(0.301,  CFRLevel.LOW),     // just above MEDIUM boundary
+                Arguments.of(0.50,   CFRLevel.LOW),     // well inside
+                Arguments.of(1.0,    CFRLevel.LOW),     // maximum realistic value (100%)
+                Arguments.of(999.0,  CFRLevel.LOW)
         );
     }
 

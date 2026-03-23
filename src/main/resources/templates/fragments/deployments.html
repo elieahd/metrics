@@ -15,7 +15,7 @@
             </td>
             <td class="stat-card">
                 <div class="stat-label">Hotfixes</div>
-                <div class="stat-value orange" th:text="${project.deployments().totalHotfixes()}">0</div>
+                <div class="stat-value red" th:text="${project.deployments().totalHotfixes()}">0</div>
             </td>
         </tr>
     </table>
@@ -104,7 +104,8 @@
             </table>
 
             <div class="center">
-                <span class="legend" th:text="${frequencyMetric.average() + ' deployments per Quarter'}"/>
+                <span class="legend"
+                      th:text="${#numbers.formatDecimal(frequencyMetric.average(), 1, 2) + ' deployments per Quarter'}"/>
             </div>
 
             <table class="ml-s mt-s">
