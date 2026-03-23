@@ -29,7 +29,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- dependencies -->
         <spring.boot.version>4.0.4</spring.boot.version>
-        <flying-saucer.version>10.1.0</flying-saucer.version>
+        <flying-saucer.version>10.2.0</flying-saucer.version>
         <okhttp.version>5.3.2</okhttp.version>
         <!-- test dependencies -->
         <archunit.version>1.4.1</archunit.version>
