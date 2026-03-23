@@ -8,13 +8,13 @@ public enum CFRLevel {
     LOW;
 
     public static CFRLevel of(final double cfr) {
-        if (cfr <= 5) {
+        if (cfr <= 0.05) {
             return CFRLevel.ELITE;
         }
-        if (cfr <= 15) {
+        if (cfr <= 0.15) {
             return CFRLevel.HIGH;
         }
-        if (cfr <= 30) {
+        if (cfr <= 0.3) {
             return CFRLevel.MEDIUM;
         }
         return CFRLevel.LOW;

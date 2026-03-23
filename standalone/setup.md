@@ -1,13 +1,12 @@
 # Tracking KPIs on CI/CD Pipelines (Standalone Setup)
 
-As our CI/CD pipelines grow, it becomes critical to monitor their health, speed, and reliability.
+As our CI/CD pipelines evolves, it becomes critical to monitor their health, speed, and reliability.
 
 ## Goals
 
 - **Identify Flaky Pipelines**: Catch workflows with dropping success rates before they block major releases.
-- **Optimize CI/CD Costs**: Spot workflows that take significantly longer than average, highlighting areas for caching
-  or
-  optimization.
+- **Optimize CI/CD Costs**: Spot workflows that take significantly longer than average, highlighting areas for catching
+  or optimization.
 - **Centralized Visibility**: Aggregate data from multiple repositories into a single, easy-to-read report.
 
 ## Components
