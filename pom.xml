@@ -32,7 +32,7 @@
         <flying-saucer.version>10.2.0</flying-saucer.version>
         <okhttp.version>5.3.2</okhttp.version>
         <!-- test dependencies -->
-        <archunit.version>1.4.1</archunit.version>
+        <archunit.version>1.4.2</archunit.version>
         <randomizer.version>0.2.3</randomizer.version>
         <!-- plugins -->
         <maven.plugin.compiler.version>3.15.0</maven.plugin.compiler.version>
