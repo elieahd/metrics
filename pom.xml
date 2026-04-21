@@ -24,7 +24,7 @@
     </dependencyManagement>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>26</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- dependencies -->
@@ -32,7 +32,7 @@
         <flying-saucer.version>10.2.0</flying-saucer.version>
         <okhttp.version>5.3.2</okhttp.version>
         <!-- test dependencies -->
-        <archunit.version>1.4.1</archunit.version>
+        <archunit.version>1.4.2</archunit.version>
         <randomizer.version>0.2.3</randomizer.version>
         <!-- plugins -->
         <maven.plugin.compiler.version>3.15.0</maven.plugin.compiler.version>
@@ -51,13 +51,13 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jackson</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>flying-saucer-pdf</artifactId>
             <version>${flying-saucer.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>

@@ -2,7 +2,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=elieahd_metrics&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=elieahd_metrics)
 
-![java-25](https://img.shields.io/badge/java-25-red)
+![java-26](https://img.shields.io/badge/java-26-red)
 
 A tool that generates development metrics reports from one or more Git repositories pull requests, releases and
 pipelines.
