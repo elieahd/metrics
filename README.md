@@ -138,13 +138,14 @@ Aggregated per contributor across all tracked repositories.
 
 Aggregated across all repositories in the project.
 
-| Metric            | Description                                |
-|-------------------|--------------------------------------------|
-| Total changes     | Number of `x.y.0` releases                 |
-| Total hotfixes    | Number of releases with patch `!= 0`       |
-| Total deployments | Total changes + total hotfixes             |
-| Hotfix Ratio      | % of releases that are hotfixes vs planned | todo replace CFR
-| Cadence           |                                            | todo 
+| Metric                | Description                                              |
+|-----------------------|----------------------------------------------------------|
+| Total changes         | Number of `x.y.0` releases                               |
+| Total hotfixes        | Number of releases with patch `!= 0`                     |
+| Total deployments     | Total changes + total hotfixes                           |
+| Hotfix Ratio          | % of releases that are hotfixes vs planned               |
+| Change Failure Metric | Incidents per deployment                                 |
+| Deployment Frequency  | how ofter teams successfully push changes to productions |  
 
 ---
 
@@ -184,6 +185,7 @@ classDiagram
         +String author
         +boolean isAuthorUser
         +List~PullRequestReview~ reviews
+        +Map~PullRequestCategory, Long~ categories
     }
     class PullRequestReview {
         +String user
@@ -203,7 +205,3 @@ classDiagram
     Pipeline "1" *-- "many" PipelineRun: has
     PullRequest "1" *-- "many" PullRequestReview: has
 ```
-
-## Backlog
-
-- [ ] lead time for changes 
