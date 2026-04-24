@@ -84,6 +84,30 @@
         </tr>
         </tbody>
     </table>
+    <table class="table-data mt-s" th:if="${repo.pullRequests().totalPullRequests() > 0}">
+        <thead>
+        <tr>
+            <th>Category</th>
+            <th class="center">Count</th>
+            <th class="center">Share</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${repo.pullRequests().categories()}">
+            <td>
+                <span th:text="${entry.key.label()}"/>
+            </td>
+            <td class="center">
+                <span class="subtext" th:text="${entry.value}">0</span>
+            </td>
+            <td class="center">
+                <span class="subtext"
+                      th:text="${#numbers.formatDecimal(entry.value * 100.0 / repo.pullRequests().totalMergedPullRequests(), 1, 1) + '%'}">0%</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
     <div class="no-data" th:if="${repo.pullRequests().totalPullRequests() == 0}">
         No Pull Requests found.
     </div>
