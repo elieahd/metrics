@@ -2,13 +2,17 @@ package com.devt.metrics.domain.services.metrics;
 
 import com.devt.metrics.domain.models.entities.PullRequest;
 import com.devt.metrics.domain.models.entities.PullRequestReview;
+import com.devt.metrics.domain.models.levels.PullRequestCategory;
 import com.devt.metrics.domain.models.metrics.PullRequestMetric;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PullRequestMetricCalculator implements MetricCalculator<List<PullRequest>, PullRequestMetric> {
 
@@ -16,7 +20,7 @@ public class PullRequestMetricCalculator implements MetricCalculator<List<PullRe
     public PullRequestMetric apply(List<PullRequest> pullRequests) {
 
         if (pullRequests == null || pullRequests.isEmpty()) {
-            return new PullRequestMetric(0, 0, 0, 0, Duration.ZERO, Duration.ZERO);
+            return new PullRequestMetric(0, 0, 0, 0, Duration.ZERO, Duration.ZERO, Collections.emptyMap());
         }
 
         int totalPullRequests = 0;
@@ -60,6 +64,12 @@ public class PullRequestMetricCalculator implements MetricCalculator<List<PullRe
 
         int reallyClosedPullRequests = totalClosedPullRequests - totalMergedPullRequests;
 
+        Map<PullRequestCategory, Long> categories = pullRequests
+                .stream()
+                .filter(this::isMerged)
+                .map(PullRequestCategory::map)
+                .collect(Collectors.groupingBy(category -> category, Collectors.counting()));
+
         return new PullRequestMetric(
                 totalPullRequests,
                 totalOpenedPullRequests,
@@ -70,7 +80,8 @@ public class PullRequestMetricCalculator implements MetricCalculator<List<PullRe
                         : Duration.ZERO,
                 cycleTimeCount > 0
                         ? totalCycleTime.dividedBy(cycleTimeCount)
-                        : Duration.ZERO
+                        : Duration.ZERO,
+                categories
         );
     }
 

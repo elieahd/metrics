@@ -1,15 +1,18 @@
 package com.devt.metrics.domain.models.metrics;
 
+import com.devt.metrics.domain.models.levels.PullRequestCategory;
 import com.devt.metrics.domain.services.helper.Formatter;
 
 import java.time.Duration;
+import java.util.Map;
 
 public record PullRequestMetric(int totalPullRequests,
                                 int totalOpenedPullRequests,
                                 int totalMergedPullRequests,
                                 int totalClosedPullRequests,
                                 Duration reviewTurnAroundTime,
-                                Duration cycleTime) {
+                                Duration cycleTime,
+                                Map<PullRequestCategory, Long> categories) {
 
     public String cycleTimeFormatted() {
         return Formatter.format(cycleTime);

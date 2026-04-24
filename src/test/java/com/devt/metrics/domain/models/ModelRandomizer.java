@@ -21,10 +21,10 @@ public class ModelRandomizer {
         // utility class shouldn't be instantiated
     }
 
-    public static PullRequest aPullRequest(List<PullRequestReview> reviews) {
+    public static PullRequest aPullRequest(String title, List<PullRequestReview> reviews) {
         return new PullRequest(
                 random(Integer.class),
-                random(String.class),
+                title,
                 random(String.class),
                 random(OffsetDateTime.class),
                 random(OffsetDateTime.class),
@@ -35,9 +35,30 @@ public class ModelRandomizer {
         );
     }
 
+    public static PullRequest aPullRequest(List<PullRequestReview> reviews) {
+        return aPullRequest(
+                random(String.class),
+                reviews
+        );
+    }
+
     public static PullRequest aPullRequest(PullRequestReview... reviews) {
         return aPullRequest(
+                random(String.class),
                 List.of(reviews)
+        );
+    }
+
+    public static PullRequest aPullRequest(String title) {
+        return aPullRequest(
+                title,
+                IntStream.range(0, 10).mapToObj(_ -> aPullRequestReview()).toList()
+        );
+    }
+
+    public static PullRequestReview aPullRequestReview() {
+        return aPullRequestReview(
+                random(String.class)
         );
     }
 
