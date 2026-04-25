@@ -22,9 +22,13 @@ public class DeploymentMetricCalculator implements MetricCalculator<List<Reposit
     @Override
     public DeploymentMetric apply(List<RepositoryMetric> repositories) {
 
-        var planned = 0;
-        var hotfixes = 0;
-        var deployments = 0;
+        if (repositories == null || repositories.isEmpty()) {
+            return DeploymentMetric.empty();
+        }
+
+        long planned = 0;
+        long hotfixes = 0;
+        long deployments = 0;
 
         List<OffsetDateTime> deploymentsDates = new ArrayList<>();
 
@@ -41,12 +45,11 @@ public class DeploymentMetricCalculator implements MetricCalculator<List<Reposit
         }
 
         double hotfixRatio = deployments > 0
-                ? (double) hotfixes / deployments
+                ? (double) hotfixes / planned
                 : 0.0;
 
-        CFRLevel level = CFRLevel.of(hotfixRatio);
-        CFRMetric cfrMetric = new CFRMetric(hotfixRatio, level);
 
+        CFRMetric cfrMetric = cfr(deployments, hotfixes);
         DeploymentFrequencyMetric frequencyMetric = frequencyCalculator.apply(deploymentsDates);
 
         return new DeploymentMetric(
@@ -59,5 +62,12 @@ public class DeploymentMetricCalculator implements MetricCalculator<List<Reposit
         );
     }
 
+    private CFRMetric cfr(long deployments, long hotfixes) {
+        double cfr = deployments > 0
+                ? (double) hotfixes / deployments
+                : 0.0;
+        CFRLevel level = CFRLevel.of(cfr);
+        return new CFRMetric(cfr, level);
+    }
 
 }

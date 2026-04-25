@@ -10,6 +10,10 @@ public record ContributionsMetrics(long totalContributors,
                                    Duration averageTimeTo10thPR,
                                    List<ContributorMetric> contributors) {
 
+    public static ContributionsMetrics empty() {
+        return new ContributionsMetrics(0, 0, Duration.ZERO, List.of());
+    }
+
     public String averageTimeTo10thPRFormatted() {
         return Formatter.formatInDaysAndHours(averageTimeTo10thPR);
     }

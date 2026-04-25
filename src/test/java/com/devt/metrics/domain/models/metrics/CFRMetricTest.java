@@ -9,6 +9,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CFRMetricTest {
 
     @Test
+    void empty_shouldInitializeCFRMetricWithEmptyValues() {
+        // Act
+        CFRMetric sut = CFRMetric.empty();
+        // Assert
+        assertThat(sut.value()).isZero();
+        assertThat(sut.level()).isEqualTo(CFRLevel.LOW);
+    }
+
+    @Test
     void isElite_shouldReturnTrue_whenLevelIsElite() {
         // Arrange
         CFRMetric sut = aCFRMetric(CFRLevel.ELITE);

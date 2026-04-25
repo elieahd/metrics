@@ -20,6 +20,10 @@ public class ContributionMetricCalculator implements MetricCalculator<List<Repos
     @Override
     public ContributionsMetrics apply(List<Repository> repositories) {
 
+        if  (repositories == null || repositories.isEmpty()) {
+            return ContributionsMetrics.empty();
+        }
+
         OffsetDateTime cutoff = OffsetDateTime.now().minusDays(CUT_OFF);
         Map<String, ContributorMetricAccumulator> acc = new HashMap<>();
         for (Repository repository : repositories) {

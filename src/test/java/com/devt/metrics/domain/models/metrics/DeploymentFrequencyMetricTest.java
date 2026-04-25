@@ -13,6 +13,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DeploymentFrequencyMetricTest {
 
     @Test
+    void empty_shouldInitializeValues() {
+        // Act
+        DeploymentFrequencyMetric sut = DeploymentFrequencyMetric.empty();
+        // Assert
+        assertThat(sut.average()).isZero();
+        assertThat(sut.frequencies()).isEmpty();
+        assertThat(sut.level()).isEqualTo(DeploymentFrequencyLevel.LOW);
+    }
+
+    @Test
     void isElite_shouldReturnTrue_whenLevelIsElite() {
         // Arrange
         DeploymentFrequencyMetric sut = aDeploymentFrequencyMetric(DeploymentFrequencyLevel.ELITE);
