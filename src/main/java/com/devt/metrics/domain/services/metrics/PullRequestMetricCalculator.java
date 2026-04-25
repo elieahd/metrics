@@ -1,14 +1,10 @@
 package com.devt.metrics.domain.services.metrics;
 
 import com.devt.metrics.domain.models.entities.PullRequest;
-import com.devt.metrics.domain.models.entities.PullRequestReview;
 import com.devt.metrics.domain.models.levels.PullRequestCategory;
 import com.devt.metrics.domain.models.metrics.PullRequestMetric;
 
 import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,53 +16,53 @@ public class PullRequestMetricCalculator implements MetricCalculator<List<PullRe
     public PullRequestMetric apply(List<PullRequest> pullRequests) {
 
         if (pullRequests == null || pullRequests.isEmpty()) {
-            return new PullRequestMetric(0, 0, 0, 0, Duration.ZERO, Duration.ZERO, Collections.emptyMap());
+            return PullRequestMetric.empty();
         }
 
-        int totalPullRequests = 0;
-        int totalOpenedPullRequests = 0;
-        int totalMergedPullRequests = 0;
-        int totalClosedPullRequests = 0;
+        long totalPullRequests = 0;
+        long totalOpenedPullRequests = 0;
+        long totalMergedPullRequests = 0;
+        long totalClosedPullRequests = 0;
 
         Duration totalReviewTurnAroundTime = Duration.ZERO;
-        int reviewTurnAroundCount = 0;
+        long reviewTurnAroundCount = 0;
 
         Duration totalCycleTime = Duration.ZERO;
-        int cycleTimeCount = 0;
+        long cycleTimeCount = 0;
 
         for (PullRequest pullRequest : pullRequests) {
             totalPullRequests++;
 
-            if (isOpen(pullRequest)) {
+            if (pullRequest.isOpen()) {
                 totalOpenedPullRequests++;
             }
 
-            if (isMerged(pullRequest)) {
+            if (pullRequest.isMerged()) {
                 totalMergedPullRequests++;
             }
 
-            if (isClosed(pullRequest)) {
+            if (pullRequest.isClosed()) {
                 totalClosedPullRequests++;
             }
 
-            Optional<Duration> cycleTime = cycleTime(pullRequest);
+            Optional<Duration> cycleTime = pullRequest.cycleTime();
             if (cycleTime.isPresent()) {
                 totalCycleTime = totalCycleTime.plus(cycleTime.get());
                 cycleTimeCount++;
             }
 
-            Optional<Duration> reviewTime = reviewTime(pullRequest);
+            Optional<Duration> reviewTime = pullRequest.reviewTime();
             if (reviewTime.isPresent()) {
                 totalReviewTurnAroundTime = totalReviewTurnAroundTime.plus(reviewTime.get());
                 reviewTurnAroundCount++;
             }
         }
 
-        int reallyClosedPullRequests = totalClosedPullRequests - totalMergedPullRequests;
+        long reallyClosedPullRequests = totalClosedPullRequests - totalMergedPullRequests;
 
         Map<PullRequestCategory, Long> categories = pullRequests
                 .stream()
-                .filter(this::isMerged)
+                .filter(PullRequest::isMerged)
                 .map(PullRequestCategory::map)
                 .collect(Collectors.groupingBy(category -> category, Collectors.counting()));
 
@@ -83,46 +79,6 @@ public class PullRequestMetricCalculator implements MetricCalculator<List<PullRe
                         : Duration.ZERO,
                 categories
         );
-    }
-
-    private boolean isClosed(PullRequest pullRequest) {
-        return pullRequest.closedAt() != null;
-    }
-
-    private boolean isMerged(PullRequest pullRequest) {
-        return pullRequest.mergedAt() != null;
-    }
-
-    private boolean isOpen(PullRequest pullRequest) {
-        return pullRequest.mergedAt() == null && pullRequest.closedAt() == null;
-    }
-
-    private Optional<Duration> cycleTime(PullRequest pullRequest) {
-        if (pullRequest.publishedAt() == null) {
-            return Optional.empty();
-        }
-
-        OffsetDateTime endDate = pullRequest.mergedAt() != null
-                ? pullRequest.mergedAt()
-                : pullRequest.closedAt();
-
-        if (endDate == null) {
-            return Optional.empty();
-        }
-        return Optional.of(Duration.between(pullRequest.publishedAt(), endDate));
-    }
-
-    private Optional<Duration> reviewTime(PullRequest pullRequest) {
-
-        if (pullRequest.mergedAt() == null || pullRequest.reviews() == null || pullRequest.reviews().isEmpty()) {
-            return Optional.empty();
-        }
-
-        return pullRequest.reviews()
-                .stream()
-                .filter(review -> review.user() != null && !review.user().equals(pullRequest.author()))
-                .min(Comparator.comparing(PullRequestReview::submittedAt))
-                .map(firstReview -> Duration.between(firstReview.submittedAt(), pullRequest.mergedAt()));
     }
 
 }

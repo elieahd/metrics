@@ -5,6 +5,10 @@ import com.devt.metrics.domain.models.levels.CFRLevel;
 public record CFRMetric(double value,
                         CFRLevel level) {
 
+    public static CFRMetric empty() {
+        return new CFRMetric(0.0, CFRLevel.LOW);
+    }
+
     public boolean isElite() {
         return CFRLevel.ELITE.equals(level);
     }

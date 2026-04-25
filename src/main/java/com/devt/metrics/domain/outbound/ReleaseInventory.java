@@ -7,4 +7,5 @@ import java.util.List;
 public interface ReleaseInventory {
 
     List<Release> findAllByRepository(String repository);
+
 }

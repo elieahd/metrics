@@ -77,9 +77,11 @@
             </td>
             <td class="center">
                 <span class="subtext" th:text="${repo.pullRequests().reviewTurnAroundTimeFormatted()}">0s</span>
+                <div class="subtext" style="font-style: italic; margin-top: 4px;">Time from PR open to first review</div>
             </td>
             <td class="center">
                 <span class="subtext" th:text="${repo.pullRequests().cycleTimeFormatted()}">0s</span>
+                <div class="subtext" style="font-style: italic; margin-top: 4px;">Time from first commit to merge</div>
             </td>
         </tr>
         </tbody>
@@ -107,7 +109,6 @@
         </tr>
         </tbody>
     </table>
-
     <div class="no-data" th:if="${repo.pullRequests().totalPullRequests() == 0}">
         No Pull Requests found.
     </div>
@@ -154,6 +155,5 @@
         </tbody>
     </table>
 </div>
-
 </body>
 </html>

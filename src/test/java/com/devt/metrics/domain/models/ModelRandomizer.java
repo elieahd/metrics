@@ -10,6 +10,7 @@ import com.devt.metrics.domain.models.metrics.DeploymentFrequencyEntry;
 import com.devt.metrics.domain.models.metrics.DeploymentFrequencyMetric;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -42,12 +43,56 @@ public class ModelRandomizer {
         );
     }
 
-    public static PullRequest aPullRequest(PullRequestReview... reviews) {
-        return aPullRequest(
+    public static PullRequest aPullRequest(OffsetDateTime mergedAt,
+                                           OffsetDateTime closedAt) {
+        return new PullRequest(
+                random(Integer.class),
                 random(String.class),
-                List.of(reviews)
+                random(String.class),
+                random(OffsetDateTime.class),
+                mergedAt,
+                closedAt,
+                random(String.class),
+                random(Boolean.class),
+                new ArrayList<>()
         );
     }
+
+    public static PullRequest aPullRequest(OffsetDateTime publishedAt,
+                                           OffsetDateTime mergedAt,
+                                           OffsetDateTime closedAt,
+                                           List<PullRequestReview> reviews) {
+        return new PullRequest(
+                random(Integer.class),
+                random(String.class),
+                random(String.class),
+                publishedAt,
+                mergedAt,
+                closedAt,
+                random(String.class),
+                random(Boolean.class),
+                reviews
+        );
+    }
+
+    public static PullRequest aPullRequest(OffsetDateTime publishedAt,
+                                           OffsetDateTime mergedAt,
+                                           OffsetDateTime closedAt,
+                                           String author,
+                                           List<PullRequestReview> reviews) {
+        return new PullRequest(
+                random(Integer.class),
+                random(String.class),
+                random(String.class),
+                publishedAt,
+                mergedAt,
+                closedAt,
+                author,
+                random(Boolean.class),
+                reviews
+        );
+    }
+
 
     public static PullRequest aPullRequest(String title) {
         return aPullRequest(
@@ -67,6 +112,14 @@ public class ModelRandomizer {
                 user,
                 random(String.class),
                 random(OffsetDateTime.class)
+        );
+    }
+
+    public static PullRequestReview aPullRequestReview(String user, OffsetDateTime publishedAt) {
+        return new PullRequestReview(
+                user,
+                random(String.class),
+                publishedAt
         );
     }
 

@@ -26,9 +26,9 @@ public class RepositoryMetricCalculator implements MetricCalculator<Repository, 
     @Override
     public RepositoryMetric apply(Repository repository) {
 
-        var totalPRs = repository.pullRequests().size();
-        var totalReleases = repository.releases().size();
-        var totalPipelines = repository.pipelines().size();
+        long totalPRs = repository.pullRequests().size();
+        long totalReleases = repository.releases().size();
+        long totalPipelines = repository.pipelines().size();
 
         List<ReleaseMetric> releases = repository.releases()
                 .stream()
