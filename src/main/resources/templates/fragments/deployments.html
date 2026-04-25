@@ -17,6 +17,12 @@
                 <div class="stat-label">Hotfixes</div>
                 <div class="stat-value red" th:text="${project.deployments().totalHotfixes()}">0</div>
             </td>
+            <td class="stat-card">
+                <div class="stat-label">Hotfix Ratio</div>
+                <div class="stat-value red"
+                     th:text="${#numbers.formatDecimal(project.deployments().hotfixRatio() * 100, 1, 1) + '%'}">0.0%
+                </div>
+            </td>
         </tr>
     </table>
 
@@ -34,47 +40,50 @@
         </table>
 
         <div class="ml-s mt-s">
-            <span class="legend">Failure rate across all deployments</span>
+            <span class="legend">
+                The <strong>Change Failure Rate (CFR)</strong> measures the percentage of deployments
+                that cause a failure in production and require a hotfix or rollback.
+                A lower CFR indicates a more stable and reliable delivery process.
+            </span>
+
             <table class="bar-table mt-s">
                 <tr>
                     <td>
                         <div class="bar-bg">
                             <div class="bar-fill"
                                  th:style="${'width: ' + cfr.value() * 100 + '%; background: ' +
-        (cfr.isElite() ? 'purple' :
-        cfr.isHigh() ? 'green' :
-        cfr.isMedium() ? 'orange' : '#f85149')
-       + ';'}">
+                                (cfr.isElite()  ? 'purple' :
+                                 cfr.isHigh()   ? 'green'  :
+                                 cfr.isMedium() ? 'orange' : '#f85149') + ';'}">
                             </div>
                         </div>
                     </td>
                     <td class="bar-value-cell">
-                        <span th:class="${cfr.isElite() ? 'purple' :
-                                          cfr.isHigh() ? 'green' :
+                        <span th:class="${cfr.isElite()  ? 'purple' :
+                                          cfr.isHigh()   ? 'green'  :
                                           cfr.isMedium() ? 'orange' : 'red'}"
                               th:text="${#numbers.formatDecimal(cfr.value() * 100, 1, 1) + '%'}">0.0%</span>
                     </td>
                 </tr>
             </table>
-
         </div>
 
         <table class="ml-s mt-s">
             <tr>
                 <td><span class="pill pill-purple">Elite</span></td>
-                <td><span class="legend">CFR below 5%</span></td>
+                <td><span class="legend">CFR below 5% — production is highly stable</span></td>
             </tr>
             <tr>
                 <td><span class="pill pill-green">High</span></td>
-                <td><span class="legend">CFR 5% to 14%</span></td>
+                <td><span class="legend">CFR 5% to 14% — occasional issues, well under control</span></td>
             </tr>
             <tr>
                 <td><span class="pill pill-orange">Medium</span></td>
-                <td><span class="legend ">CFR between 15% to 29%</span></td>
+                <td><span class="legend">CFR 15% to 29% — notable failure rate, room for improvement</span></td>
             </tr>
             <tr>
                 <td><span class="pill pill-red">Low</span></td>
-                <td><span class="legend">CFR above 30%</span></td>
+                <td><span class="legend">CFR above 30% — high instability, reliability should be prioritized</span></td>
             </tr>
         </table>
     </div>
@@ -82,9 +91,8 @@
     <div class="table-container section" th:with="frequencyMetric=${project.deployments().frequencyMetric()}">
         <table class="table-header">
             <tr>
-                <td><span class="table-header-title">Frequencies</span></td>
+                <td><span class="table-header-title">Deployment Frequency</span></td>
                 <td class="right">
-
                     <span class="pill pill-purple" th:if="${frequencyMetric.isElite()}">Elite</span>
                     <span class="pill pill-green" th:if="${frequencyMetric.isHigh()}">High</span>
                     <span class="pill pill-orange" th:if="${frequencyMetric.isMedium()}">Medium</span>
@@ -94,7 +102,13 @@
         </table>
 
         <div class="ml-s mt-s">
-            <table class="stats-table">
+            <span class="legend">
+                <strong>Deployment Frequency</strong> measures how often code is successfully released
+                to production. Higher frequency reflects smaller, safer, and more iterative delivery
+                cycles, reducing risk and enabling faster feedback loops.
+            </span>
+
+            <table class="stats-table mt-s">
                 <tr>
                     <td class="stat-card" th:each="frequency : ${frequencyMetric.frequencies()}">
                         <div class="stat-label" th:text="${frequency.period()}"/>
@@ -111,7 +125,7 @@
             <table class="ml-s mt-s">
                 <tr>
                     <td><span class="pill pill-purple">Elite</span></td>
-                    <td><span class="legend">On demand (multiple deploys per day)</span></td>
+                    <td><span class="legend">On demand — multiple deployments per day</span></td>
                 </tr>
                 <tr>
                     <td><span class="pill pill-green">High</span></td>
@@ -119,17 +133,15 @@
                 </tr>
                 <tr>
                     <td><span class="pill pill-orange">Medium</span></td>
-                    <td><span class="legend ">Between once per week and once per month</span></td>
+                    <td><span class="legend">Between once per week and once per month</span></td>
                 </tr>
                 <tr>
                     <td><span class="pill pill-red">Low</span></td>
-                    <td><span class="legend">Between once per month and once every six months, or fewer than once every six months</span>
-                    </td>
+                    <td><span class="legend">Less than once per month — slow, high-risk release cycle</span></td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
-
 </body>
 </html>

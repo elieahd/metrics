@@ -8,6 +8,10 @@ public record DeploymentFrequencyMetric(double average,
                                         List<DeploymentFrequencyEntry> frequencies,
                                         DeploymentFrequencyLevel level) {
 
+    public static DeploymentFrequencyMetric empty() {
+        return new DeploymentFrequencyMetric(0.0, List.of(), DeploymentFrequencyLevel.LOW);
+    }
+
     public boolean isElite() {
         return DeploymentFrequencyLevel.ELITE.equals(level);
     }

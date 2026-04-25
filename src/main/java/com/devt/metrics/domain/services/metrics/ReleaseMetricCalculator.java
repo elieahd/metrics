@@ -7,7 +7,6 @@ public class ReleaseMetricCalculator implements MetricCalculator<Release, Releas
 
     @Override
     public ReleaseMetric apply(Release release) {
-
         String version = release.tagName().replace("-rc", "");
 
         boolean isPlanned = version.endsWith(".0");

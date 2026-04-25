@@ -17,13 +17,13 @@ class DurationFormatterTest {
                 Arguments.of(Duration.ZERO, "0s"),
                 Arguments.of(Duration.ofSeconds(45), "45s"),
                 Arguments.of(Duration.ofMinutes(5).plusSeconds(30), "5min 30s"),
-                Arguments.of(Duration.ofHours(23).plusMinutes(59).plusSeconds(59), "23h 59min 59s"),
+                Arguments.of(Duration.ofHours(23).plusMinutes(59).plusSeconds(59), "23h 59min"),
                 Arguments.of(Duration.ofMinutes(10), "10min 0s"),
-                Arguments.of(Duration.ofHours(2).plusMinutes(15).plusSeconds(10), "2h 15min 10s"),
-                Arguments.of(Duration.ofHours(3), "3h 0min 0s"),
-                Arguments.of(Duration.ofDays(1).plusHours(4).plusMinutes(30).plusSeconds(20), "1d 4h 30min 20s"),
-                Arguments.of(Duration.ofDays(2), "2d 0h 0min 0s"),
-                Arguments.of(Duration.ofDays(5).plusHours(23).plusMinutes(59).plusSeconds(59), "5d 23h 59min 59s"),
+                Arguments.of(Duration.ofHours(2).plusMinutes(15).plusSeconds(10), "2h 15min"),
+                Arguments.of(Duration.ofHours(3), "3h 0min"),
+                Arguments.of(Duration.ofDays(1).plusHours(4).plusMinutes(30).plusSeconds(20), "1d 4h"),
+                Arguments.of(Duration.ofDays(2), "2d 0h"),
+                Arguments.of(Duration.ofDays(5).plusHours(23).plusMinutes(59).plusSeconds(59), "5d 23h"),
                 Arguments.of(Duration.ofMinutes(59).plusSeconds(59), "59min 59s")
         );
     }

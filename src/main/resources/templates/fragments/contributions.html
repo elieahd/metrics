@@ -16,6 +16,9 @@
             <td class="stat-card">
                 <div class="stat-label">Time to 10th PR</div>
                 <div class="stat-value blue" th:text="${project.contributions().averageTimeTo10thPRFormatted()}">0</div>
+                <div class="subtext" style="font-style: italic; margin-top: 4px;">
+                    Avg. time from a contributor's 1st to 10th merged PR
+                </div>
             </td>
         </tr>
     </table>
@@ -56,7 +59,7 @@
                 </td>
                 <td class="center">
                     <span class="pill pill-purple"
-                          th:text="${contributor.totalReviews() }">0</span>
+                          th:text="${contributor.totalReviews()}">0</span>
                 </td>
                 <td class="center">
                     <span class="subtext"
@@ -77,9 +80,6 @@
             </tbody>
         </table>
     </div>
-
-</div>
-
 </div>
 </body>
 </html>

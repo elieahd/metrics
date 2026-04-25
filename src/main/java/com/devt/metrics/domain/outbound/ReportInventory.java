@@ -5,4 +5,5 @@ import com.devt.metrics.domain.models.reports.Report;
 public interface ReportInventory {
 
     String store(Report report);
+
 }

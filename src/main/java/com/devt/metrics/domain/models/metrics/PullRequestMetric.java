@@ -6,13 +6,17 @@ import com.devt.metrics.domain.services.helper.Formatter;
 import java.time.Duration;
 import java.util.Map;
 
-public record PullRequestMetric(int totalPullRequests,
-                                int totalOpenedPullRequests,
-                                int totalMergedPullRequests,
-                                int totalClosedPullRequests,
+public record PullRequestMetric(long totalPullRequests,
+                                long totalOpenedPullRequests,
+                                long totalMergedPullRequests,
+                                long totalClosedPullRequests,
                                 Duration reviewTurnAroundTime,
                                 Duration cycleTime,
                                 Map<PullRequestCategory, Long> categories) {
+
+    public static PullRequestMetric empty() {
+        return new PullRequestMetric(0, 0, 0, 0, Duration.ZERO, Duration.ZERO, Map.of());
+    }
 
     public String cycleTimeFormatted() {
         return Formatter.format(cycleTime);

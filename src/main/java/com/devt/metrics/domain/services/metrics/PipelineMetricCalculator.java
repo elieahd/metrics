@@ -11,17 +11,12 @@ public class PipelineMetricCalculator implements MetricCalculator<Pipeline, Pipe
     @Override
     public PipelineMetric apply(Pipeline pipeline) {
 
-        if (pipeline.runs().isEmpty()) {
-            return new PipelineMetric(
-                    pipeline.name(),
-                    0,
-                    0.0,
-                    Duration.ZERO
-            );
+        if (pipeline.runs() == null || pipeline.runs().isEmpty()) {
+            return PipelineMetric.withNoRuns(pipeline.name());
         }
 
-        int totalRuns = pipeline.runs().size();
-        int successCount = 0;
+        long totalRuns = pipeline.runs().size();
+        long successCount = 0;
         Duration totalDuration = Duration.ZERO;
 
         for (PipelineRun run : pipeline.runs()) {

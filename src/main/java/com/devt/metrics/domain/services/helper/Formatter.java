@@ -30,11 +30,11 @@ public class Formatter {
         long seconds = input.toSecondsPart();
 
         if (days > 0) {
-            return "%dd %dh %dmin %ds".formatted(days, hours, minutes, seconds);
+            return "%dd %dh".formatted(days, hours);
         }
 
         if (hours > 0) {
-            return "%dh %dmin %ds".formatted(hours, minutes, seconds);
+            return "%dh %dmin".formatted(hours, minutes);
         }
 
         if (minutes > 0) {
