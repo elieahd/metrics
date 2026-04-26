@@ -1,8 +1,10 @@
 package com.devt.metrics.domain.models;
 
+import com.devt.metrics.domain.models.entities.Pipeline;
 import com.devt.metrics.domain.models.entities.PipelineRun;
 import com.devt.metrics.domain.models.entities.PullRequest;
 import com.devt.metrics.domain.models.entities.PullRequestReview;
+import com.devt.metrics.domain.models.entities.Release;
 import com.devt.metrics.domain.models.levels.CFRLevel;
 import com.devt.metrics.domain.models.levels.DeploymentFrequencyLevel;
 import com.devt.metrics.domain.models.metrics.CFRMetric;
@@ -123,10 +125,37 @@ public class ModelRandomizer {
         );
     }
 
+    public static Pipeline aPipeline(List<PipelineRun> runs) {
+        return new Pipeline(
+                random(String.class),
+                runs
+        );
+    }
+
     public static PipelineRun aPipelineRun(OffsetDateTime startedAt,
                                            OffsetDateTime updatedAt) {
         return new PipelineRun(
                 random(boolean.class),
+                startedAt,
+                random(OffsetDateTime.class),
+                updatedAt
+        );
+    }
+
+    public static PipelineRun aSuccessfullPipelineRun(OffsetDateTime startedAt,
+                                                      OffsetDateTime updatedAt) {
+        return new PipelineRun(
+                true,
+                startedAt,
+                random(OffsetDateTime.class),
+                updatedAt
+        );
+    }
+
+    public static PipelineRun aFailedPipelineRun(OffsetDateTime startedAt,
+                                                 OffsetDateTime updatedAt) {
+        return new PipelineRun(
+                false,
                 startedAt,
                 random(OffsetDateTime.class),
                 updatedAt
@@ -188,4 +217,11 @@ public class ModelRandomizer {
         );
     }
 
+    public static Release aRelease(String tagName) {
+        return new Release(
+                random(String.class),
+                tagName,
+                random(OffsetDateTime.class)
+        );
+    }
 }
