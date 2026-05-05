@@ -2,15 +2,19 @@ package com.devt.metrics.domain.models;
 
 import com.devt.metrics.domain.models.entities.Pipeline;
 import com.devt.metrics.domain.models.entities.PipelineRun;
+import com.devt.metrics.domain.models.entities.Project;
 import com.devt.metrics.domain.models.entities.PullRequest;
 import com.devt.metrics.domain.models.entities.PullRequestReview;
 import com.devt.metrics.domain.models.entities.Release;
+import com.devt.metrics.domain.models.entities.Repository;
 import com.devt.metrics.domain.models.levels.CFRLevel;
 import com.devt.metrics.domain.models.levels.DeploymentFrequencyLevel;
 import com.devt.metrics.domain.models.metrics.CFRMetric;
 import com.devt.metrics.domain.models.metrics.DeploymentFrequencyEntry;
 import com.devt.metrics.domain.models.metrics.DeploymentFrequencyMetric;
+import com.devt.metrics.domain.models.reports.Report;
 
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,6 +226,44 @@ public class ModelRandomizer {
                 random(String.class),
                 tagName,
                 random(OffsetDateTime.class)
+        );
+    }
+
+    public static Repository aRepository() {
+        return new Repository(
+                random(String.class),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+
+    public static Project aProject() {
+        return new Project(
+                aProjectName(),
+                IntStream.range(0, 10).mapToObj(_ -> aRepository()).toList()
+        );
+    }
+
+    public static String aReportName() {
+        return "test-%s".formatted(random(String.class).replace("/", ""));
+    }
+
+    public static String aProjectName() {
+        return "test-%s".formatted(random(String.class).replace("/", ""));
+    }
+
+    public static Report aReport() {
+        return aReport(
+                random(String.class)
+        );
+    }
+
+    public static Report aReport(String type) {
+        return new Report(
+                aReportName(),
+                type,
+                random(String.class).getBytes(StandardCharsets.UTF_8)
         );
     }
 }
