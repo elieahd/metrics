@@ -30,7 +30,7 @@
         <!-- dependencies -->
         <spring.boot.version>4.0.6</spring.boot.version>
         <flying-saucer.version>10.2.0</flying-saucer.version>
-        <okhttp.version>5.3.2</okhttp.version>
+        <okhttp.version>5.4.0</okhttp.version>
         <!-- test dependencies -->
         <archunit.version>1.4.2</archunit.version>
         <randomizer.version>0.2.3</randomizer.version>
